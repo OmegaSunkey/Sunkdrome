@@ -1,8 +1,9 @@
 package omega.sunkey.sunkdrome.server
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import io.javalin.Javalin
-import io.javalin.http.Context
+import omega.sunkey.sunkdrome.server.dataclasses.License
+import omega.sunkey.sunkdrome.server.dataclasses.LicenseView
+import omega.sunkey.sunkdrome.server.dataclasses.OpenSubsonicExtensionsPayload
 
 fun Javalin.setBeforeHandlers() {
     this.before("/rest/*") { ctx ->
@@ -31,5 +32,13 @@ fun Javalin.setBeforeHandlers() {
 fun Javalin.setPaths() {
     this.get("/rest/ping.view") { ctx ->
         success(ctx, null)
+    }
+
+    this.get("/rest/getLicense.view") { ctx ->
+        success(ctx, LicenseView(License()))
+    }
+
+    this.get("/rest/getOpenSubsonicExtensions.view") { ctx ->
+        success(ctx, OpenSubsonicExtensionsPayload(emptyList()))
     }
 }
