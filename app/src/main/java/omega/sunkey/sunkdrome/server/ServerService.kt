@@ -12,9 +12,14 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import io.javalin.Javalin
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 
 class ServerService : Service() {
     private var server: Javalin? = null
+    private val serverScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val channelId = "sunkdrome_server_channel"
     override fun onCreate() {
         super.onCreate()
@@ -37,7 +42,7 @@ class ServerService : Service() {
             config.showJavalinBanner = false
         }.apply {
             setBeforeHandlers()
-            setPaths()
+            setPaths(applicationContext, serverScope)
         }.start("0.0.0.0",4040)
 
         Log.i("ServerService", "started")
@@ -51,19 +56,18 @@ class ServerService : Service() {
             .build()
     }
     private fun createNotificationChannel() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Sunkdrome Status",
-                NotificationManager.IMPORTANCE_LOW
-            )
-            val manager = getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(channel)
-        }
+        val channel = NotificationChannel(
+            channelId,
+            "Sunkdrome Status",
+            NotificationManager.IMPORTANCE_LOW
+        )
+        val manager = getSystemService(NotificationManager::class.java)
+        manager.createNotificationChannel(channel)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        serverScope.cancel()
         server?.stop()
         server = null
         Log.i("ServerService", "stopped")
