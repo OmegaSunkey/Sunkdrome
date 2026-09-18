@@ -65,6 +65,9 @@ interface SubsonicDao {
     @Query("SELECT * FROM artists WHERE id = :artistId")
     suspend fun getArtistWithDetails(artistId: String): ArtistsWithMeta?
 
+    @Query("SELECT * FROM artists WHERE id = :artistId")
+    suspend fun getArtist(artistId: String): Artist?
+
     @Query("SELECT * FROM songs WHERE title LIKE '%' || :query || '%' LIMIT 20")
     suspend fun searchSongs(query: String): List<Song>
 
