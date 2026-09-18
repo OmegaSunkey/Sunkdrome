@@ -47,7 +47,7 @@ data class Song(
 data class Album(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "artist_id") val artistId: String?,
+    @ColumnInfo(name = "artist_id") val artistId: String,
     @ColumnInfo(name = "year") val year: Int? = null,
 )
 
