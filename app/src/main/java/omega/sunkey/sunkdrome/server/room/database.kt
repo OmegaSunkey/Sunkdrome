@@ -37,28 +37,33 @@ interface SubsonicDao {
     @Query("SELECT * FROM songs")
     suspend fun getAllSongs(): List<Song>
 
+    @Transaction
     @Query("SELECT * FROM songs WHERE id = :songId")
-    suspend fun getSongById(songId: String): Song?
+    suspend fun getSongById(songId: String): SongWithMetadata?
 
     @Query("SELECT path FROM songs")
     suspend fun getAllSongPaths(): List<String>
-
+    @Transaction
     @Query("SELECT * FROM songs WHERE path LIKE :path || '%' ORDER BY path ASC")
-    suspend fun getSongsByPath(path: String): List<Song>
+    suspend fun getSongsByPath(path: String): List<SongWithMetadata>
 
     @Query("SELECT * FROM albums")
     suspend fun getAllAlbums(): List<Album>
 
     @Transaction
     @Query("SELECT * FROM albums WHERE id = :albumId")
-    suspend fun getAlbumWithSongs(albumId: String): AlbumWithSongs?
+    suspend fun getAlbumWithSongs(albumId: String): AlbumsWithMeta?
 
     @Query("SELECT * FROM artists ORDER BY name ASC")
     suspend fun getAllArtists(): List<Artist>
 
     @Transaction
+    @Query("SELECT * FROM artists ORDER BY name ASC")
+    suspend fun getAllArtistsWithMeta(): List<ArtistsWithMeta>
+
+    @Transaction
     @Query("SELECT * FROM artists WHERE id = :artistId")
-    suspend fun getArtistsWithDetails(artistId: String): ArtistWithAlbumsAndSongs?
+    suspend fun getArtistWithDetails(artistId: String): ArtistsWithMeta?
 
     @Query("SELECT * FROM songs WHERE title LIKE '%' || :query || '%' LIMIT 20")
     suspend fun searchSongs(query: String): List<Song>

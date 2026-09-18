@@ -59,7 +59,7 @@ data class Artist(
     @ColumnInfo(name = "name") val name: String,
 )
 
-data class AlbumWithSongs(
+data class AlbumsWithMeta(
     @Embedded val album: Album,
 
     @Relation(
@@ -69,7 +69,7 @@ data class AlbumWithSongs(
     val songs: List<Song>
 )
 
-data class ArtistWithAlbumsAndSongs(
+data class ArtistsWithMeta(
     @Embedded val artist: Artist,
 
     @Relation(
@@ -77,5 +77,20 @@ data class ArtistWithAlbumsAndSongs(
         parentColumn = "id",
         entityColumn = "artist_id"
     )
-    val albums: List<AlbumWithSongs>
+    val albums: List<AlbumsWithMeta>
+)
+
+data class SongWithMetadata(
+    @Embedded val song: Song,
+
+    @Relation(
+        parentColumn = "album_id",
+        entityColumn = "id"
+    )
+    val album: Album,
+    @Relation(
+        parentColumn = "artist_id",
+        entityColumn = "id"
+    )
+    val artist: Artist
 )

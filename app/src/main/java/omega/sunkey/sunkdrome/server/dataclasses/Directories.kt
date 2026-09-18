@@ -20,7 +20,7 @@ data class DirectoryChild(
     val suffix: String? = null,
     val contentType: String? = null,
     val path: String? = null,
-    val created: Long? = null
+    val created: String? = null
 )
 
 data class Directories(val directory: Directory)
@@ -32,6 +32,7 @@ fun conType(suf: String): String {
         "wav" -> "audio/wav"
         "ogg" -> "audio/ogg"
         "m4a" -> "audio/mp4"
+        "opus" -> "audio/opus"
         else -> "audio/*"
     }
 }
