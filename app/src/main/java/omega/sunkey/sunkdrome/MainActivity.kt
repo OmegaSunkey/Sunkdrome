@@ -70,13 +70,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
             started = true
         }
     } // i shall merge start and scan into one later
-    val tempReq = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { gra ->
-        if (gra) {
-            startScan(context)
-        }
-    }
     var music by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(
@@ -84,6 +77,14 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 perm
             ) == PackageManager.PERMISSION_GRANTED
         )
+    }
+    val tempReq = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { gra ->
+        if (gra) {
+            startScan(context)
+            music = true
+        }
     }
     Column(modifier = modifier) {
         Button(
