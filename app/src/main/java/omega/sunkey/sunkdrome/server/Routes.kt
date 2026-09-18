@@ -14,6 +14,7 @@ import omega.sunkey.sunkdrome.server.endpoints.getMusicDirectory
 import omega.sunkey.sunkdrome.server.endpoints.getMusicFolders
 import omega.sunkey.sunkdrome.server.endpoints.getSong
 import omega.sunkey.sunkdrome.server.endpoints.search3
+import omega.sunkey.sunkdrome.server.endpoints.stream
 import omega.sunkey.sunkdrome.server.room.SubsonicDatabase
 import java.time.Instant
 import java.time.ZoneOffset
@@ -80,6 +81,10 @@ fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
     }
     this.get("/rest/search3.view") { ctx ->
         search3(ctx, scope, dao)
+    }
+
+    this.get("/rest/stream.view") { ctx ->
+        stream(ctx, scope, dao, context)
     }
 }
 
