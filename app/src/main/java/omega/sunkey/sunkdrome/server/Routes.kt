@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import omega.sunkey.sunkdrome.server.dataclasses.License
 import omega.sunkey.sunkdrome.server.dataclasses.LicenseView
 import omega.sunkey.sunkdrome.server.dataclasses.OpenSubsonicExtensionsPayload
+import omega.sunkey.sunkdrome.server.endpoints.getArtist
 import omega.sunkey.sunkdrome.server.endpoints.getArtists
 import omega.sunkey.sunkdrome.server.endpoints.getMusicDirectory
 import omega.sunkey.sunkdrome.server.endpoints.getMusicFolders
@@ -56,6 +57,10 @@ fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
 
     this.get("/rest/getArtists.view") { ctx ->
         getArtists(ctx, scope, dao)
+    }
+
+    this.get("/rest/getArtist.view") { ctx ->
+        getArtist(ctx, scope, dao)
     }
 }
 
