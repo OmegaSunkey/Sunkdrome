@@ -66,7 +66,13 @@ data class AlbumsWithMeta(
         parentColumn = "id",
         entityColumn = "album_id"
     )
-    val songs: List<Song>
+    val songs: List<Song>,
+
+    @Relation(
+        parentColumn = "artist_id",
+        entityColumn = "id"
+    )
+    val artist: Artist
 )
 
 data class ArtistsWithMeta(
