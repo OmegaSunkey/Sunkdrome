@@ -18,14 +18,22 @@ fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
     }
     context.future(scope.future {
         val metaartist = dao.getArtistWithDetails(id)
+        if (metaartist == null) {
+            reject(context, 70, "The requested data was not found.")
+            return@future
+        }
         val albums = mutableListOf<AlbumsWithoutSongs>()
-        metaartist!!.albums.forEach {
+        metaartist!!.albums.forEach { it ->
+            var totalDuration = 0
+            it.songs.forEach { s ->
+                totalDuration += s.duration
+            }
             albums.add(AlbumsWithoutSongs(
                 it.album.id,
                 it.album.title,
                 metaartist.artist.name,
                 it.songs.size,
-                null
+                totalDuration
             ))
         }
         success(context, SingleArtistView(
