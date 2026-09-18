@@ -9,9 +9,11 @@ import omega.sunkey.sunkdrome.server.dataclasses.OpenSubsonicExtensionsPayload
 import omega.sunkey.sunkdrome.server.endpoints.getAlbum
 import omega.sunkey.sunkdrome.server.endpoints.getArtist
 import omega.sunkey.sunkdrome.server.endpoints.getArtists
+import omega.sunkey.sunkdrome.server.endpoints.getIndexes
 import omega.sunkey.sunkdrome.server.endpoints.getMusicDirectory
 import omega.sunkey.sunkdrome.server.endpoints.getMusicFolders
 import omega.sunkey.sunkdrome.server.endpoints.getSong
+import omega.sunkey.sunkdrome.server.endpoints.search3
 import omega.sunkey.sunkdrome.server.room.SubsonicDatabase
 import java.time.Instant
 import java.time.ZoneOffset
@@ -71,6 +73,13 @@ fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
 
     this.get("/rest/getSong.view") { ctx ->
         getSong(ctx, scope, dao)
+    }
+
+    this.get("/rest/getIndexes.view") { ctx ->
+        getIndexes(ctx, scope, dao)
+    }
+    this.get("/rest/search3.view") { ctx ->
+        search3(ctx, scope, dao)
     }
 }
 
