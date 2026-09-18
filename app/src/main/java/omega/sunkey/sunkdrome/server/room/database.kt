@@ -72,14 +72,17 @@ interface SubsonicDao {
     @Query("SELECT * FROM artists WHERE id = :artistId")
     suspend fun getArtist(artistId: String): Artist?
 
-    @Query("SELECT * FROM songs WHERE title LIKE '%' || :query || '%' LIMIT 20")
-    suspend fun searchSongs(query: String): List<Song>
+    @Transaction
+    @Query("SELECT * FROM songs WHERE title LIKE '%' || :query || '%' LIMIT :limit OFFSET :offset")
+    suspend fun searchSongs(query: String, limit: Int, offset: Int): List<SongWithMetadata>
 
-    @Query("SELECT * FROM albums WHERE title LIKE '%' || :query || '%' LIMIT 20")
-    suspend fun searchAlbums(query: String): List<Album>
+    @Transaction
+    @Query("SELECT * FROM albums WHERE title LIKE '%' || :query || '%' LIMIT :limit OFFSET :offset")
+    suspend fun searchAlbums(query: String, limit: Int, offset: Int): List<AlbumsWithMeta>
 
-    @Query("SELECT * FROM artists WHERE name LIKE '%' || :query || '%' LIMIT 20")
-    suspend fun searchArtists(query: String): List<Artist>
+    @Transaction
+    @Query("SELECT * FROM artists WHERE name LIKE '%' || :query || '%' LIMIT :limit OFFSET :offset")
+    suspend fun searchArtists(query: String, limit: Int, offset: Int): List<ArtistsWithMeta>
 
     @Insert(onConflict = REPLACE)
     suspend fun insertArtists(artists: List<Artist>)
