@@ -47,6 +47,10 @@ interface SubsonicDao {
     @Query("SELECT * FROM songs WHERE path LIKE :path || '%' ORDER BY path ASC")
     suspend fun getSongsByPath(path: String): List<SongWithMetadata>
 
+    @Transaction
+    @Query("SELECT * FROM albums")
+    suspend fun getAllALbumsWithMeta(): List<AlbumsWithMeta>
+
     @Query("SELECT * FROM albums")
     suspend fun getAllAlbums(): List<Album>
 
