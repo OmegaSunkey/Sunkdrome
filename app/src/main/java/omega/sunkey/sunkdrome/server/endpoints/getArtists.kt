@@ -12,7 +12,7 @@ import omega.sunkey.sunkdrome.server.success
 
 fun getArtists(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
     val ignoredArticles = listOf("The", "El", "La", "Los", "Las")
-    context.future(scope.future {
+    /*context.future(scope.future {
         val allArtists = dao.getAllArtistsWithMeta()
         val artistIndex = mutableListOf<ArtistIndex>()
         val lmao = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#"
@@ -27,6 +27,38 @@ fun getArtists(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 ))
             }
             artistIndex.add(ArtistIndex(char.toString(), data))
+        }
+        success(context, ArtistsView(Artists(ignoredArticles, artistIndex)))
+    })*/
+    context.future(scope.future{
+        val allArtists = dao.getAllArtistsWithMeta()
+        val artistIndex = mutableListOf<ArtistIndex>()
+        val artistMap = mutableMapOf<String, MutableList<ArtistData>>()
+        for(metaartist in allArtists) {
+            val fChar = getFirstChar(metaartist.artist.name, ignoredArticles)
+            if(artistMap.containsKey(fChar)) {
+                artistMap[fChar]!!.add(
+                    ArtistData(
+                        metaartist.artist.id,
+                        metaartist.artist.name,
+                        metaartist.albums.size
+                    )
+                )
+            } else {
+                artistMap[fChar] = mutableListOf<ArtistData>(
+                    ArtistData(
+                        metaartist.artist.id,
+                        metaartist.artist.name,
+                        metaartist.albums.size
+                    )
+                )
+            }
+        }
+        for (artist in artistMap) {
+            artistIndex.add(ArtistIndex(
+                artist.key,
+                artist.value
+            ))
         }
         success(context, ArtistsView(Artists(ignoredArticles, artistIndex)))
     })
