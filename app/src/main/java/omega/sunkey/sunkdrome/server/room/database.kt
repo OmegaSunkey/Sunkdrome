@@ -39,7 +39,7 @@ interface SubsonicDao {
 
     @Transaction
     @Query("SELECT * FROM songs WHERE id = :songId")
-    suspend fun getSongById(songId: String): SongWithMetadata?
+    suspend fun getSongWithMeta(songId: String): SongWithMetadata?
 
     @Query("SELECT * FROM songs WHERE id = :songId")
     suspend fun getSong(songId: String): Song?

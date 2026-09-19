@@ -16,7 +16,7 @@ fun stream(context: Context, scope: CoroutineScope, dao: SubsonicDao, androidCon
         return
     }
     context.future(scope.future {
-        val song = dao.getSongById(id)
+        val song = dao.getSongWithMeta(id)
         if(song == null) {
             reject(context, 70, "The requested content was not found.")
             return@future

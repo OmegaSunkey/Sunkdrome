@@ -1,6 +1,5 @@
 package omega.sunkey.sunkdrome.server.endpoints
 
-import io.javalin.core.util.RouteOverviewUtil.metaInfo
 import io.javalin.http.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
@@ -19,7 +18,7 @@ fun getSong(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
         return
     }
     context.future(scope.future {
-        val metasong = dao.getSongById(id)
+        val metasong = dao.getSongWithMeta(id)
         if (metasong == null) {
             reject(context, 70, "The requested data was not found.")
             return@future
