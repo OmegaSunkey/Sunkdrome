@@ -27,14 +27,21 @@ fun stream(context: Context, scope: CoroutineScope, dao: SubsonicDao, androidCon
 
 fun sendStream(context: Context, id: String, mime: String, size: Long, androidContext: android.content.Context) {
     context.contentType(mime)
-    context.header("Content-Length", size.toString())
+    context.header("Accept-Ranges", "bytes")
 
     val uri = ContentUris.withAppendedId(
         MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL),
         id.toLong()
     )
     val inputStream = androidContext.contentResolver.openInputStream(uri)
-    if (inputStream != null) {
+    if (inputStream != null && context.header("Range") != null) {
+        val bytesh = context.header("Range")!!.removePrefix("bytes=")
+        val buffer = ByteArray((bytesh.split("-")[1].toInt() - bytesh.split("-")[0].toInt()))
+        inputStream.read(buffer, bytesh.split("-")[0].toInt(), bytesh.split("-")[1].toInt())
+        context.header("Content-Length", buffer.size.toString())
+        context.result(buffer)
+    } else if (inputStream != null) {
+        context.header("Content-Length", size.toString())
         context.result(inputStream)
     }
 }
