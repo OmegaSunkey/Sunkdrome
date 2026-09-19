@@ -9,6 +9,7 @@ import omega.sunkey.sunkdrome.server.dataclasses.OpenSubsonicExtensionsPayload
 import omega.sunkey.sunkdrome.server.endpoints.getAlbum
 import omega.sunkey.sunkdrome.server.endpoints.getArtist
 import omega.sunkey.sunkdrome.server.endpoints.getArtists
+import omega.sunkey.sunkdrome.server.endpoints.getCoverArt
 import omega.sunkey.sunkdrome.server.endpoints.getIndexes
 import omega.sunkey.sunkdrome.server.endpoints.getMusicDirectory
 import omega.sunkey.sunkdrome.server.endpoints.getMusicFolders
@@ -85,6 +86,10 @@ fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
 
     this.get("/rest/stream.view") { ctx ->
         stream(ctx, scope, dao, context)
+    }
+
+    this.get("/rest/getCoverArt.view") { ctx ->
+        getCoverArt(ctx, scope, dao, context)
     }
 }
 
