@@ -15,6 +15,7 @@ import omega.sunkey.sunkdrome.server.room.Song
 import omega.sunkey.sunkdrome.server.room.Album
 import omega.sunkey.sunkdrome.server.room.SubsonicDatabase
 import java.security.MessageDigest
+import androidx.core.net.toUri
 
 class MediaScanner (
     context: Context,
@@ -118,7 +119,7 @@ class MediaScanner (
                 val path = cursor.getString(data)
                 val dateAdded = cursor.getLong(date)
                 val cUri = ContentUris.withAppendedId(collection, idd)
-                val coUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), cursor.getLong(albumId))
+                val coUri = ContentUris.withAppendedId("content://media/external/audio/albumart".toUri(), cursor.getLong(albumId))
                 audioFiles.add(AudioFile(idd, namee, dura, size, path, dateAdded, cUri, coUri))
             }
         }
