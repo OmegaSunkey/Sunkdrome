@@ -21,7 +21,7 @@ fun getAlbum(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
             reject(context, 70, "The requested data was not found.")
             return@future
         }
-        val artist = dao.getArtist(metaalbum.album.artistId!!)
+        val artist = dao.getArtist(metaalbum.album.artistId)
         var totalDuration = 0
         metaalbum.songs.forEach { it ->
             totalDuration += it.duration
@@ -33,7 +33,8 @@ fun getAlbum(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 artist!!.name,
                 metaalbum.songs.size,
                 totalDuration,
-                metaalbum.songs
+                metaalbum.songs,
+                metaalbum.album.coverArt
             )
         ))
     })

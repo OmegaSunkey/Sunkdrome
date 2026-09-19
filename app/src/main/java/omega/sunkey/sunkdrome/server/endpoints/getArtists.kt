@@ -23,7 +23,8 @@ fun getArtists(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                     ArtistData(
                         metaartist.artist.id,
                         metaartist.artist.name,
-                        metaartist.albums.size
+                        metaartist.albums.size,
+                        metaartist.albums[0].album.coverArt
                     )
                 )
             } else {
@@ -31,7 +32,8 @@ fun getArtists(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                     ArtistData(
                         metaartist.artist.id,
                         metaartist.artist.name,
-                        metaartist.albums.size
+                        metaartist.albums.size,
+                        metaartist.albums[0].album.coverArt
                     )
                 )
             }
@@ -49,10 +51,10 @@ fun getArtists(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
 fun getFirstChar(name: String, igArt: List<String>): String {
     if(name.isEmpty()) return "#"
 
-    var char = name
+    var char = name.lowercase()
     for(art in igArt) {
         if(char.startsWith("$art ", ignoreCase = true)) {
-            char = char.removePrefix("$art ")
+            char = char.removePrefix("${art.lowercase()} ")
         }
     }
     char = char.first().uppercase()

@@ -50,7 +50,7 @@ interface SubsonicDao {
 
     @Transaction
     @Query("SELECT * FROM albums")
-    suspend fun getAllALbumsWithMeta(): List<AlbumsWithMeta>
+    suspend fun getAllAlbumsWithMeta(): List<AlbumsWithMeta>
 
     @Query("SELECT * FROM albums")
     suspend fun getAllAlbums(): List<Album>

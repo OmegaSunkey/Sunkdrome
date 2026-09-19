@@ -12,5 +12,6 @@ data class AlbumData(
     val artist: String,
     val songCount: Int,
     val duration: Int?,
-    val song: List<Song>
+    val song: List<Song>,
+    val coverArt: String
 )

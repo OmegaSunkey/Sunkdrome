@@ -34,7 +34,7 @@ fun getSong(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 metasong.song.track,
                 metasong.song.year,
                 metasong.song.genre,
-                null,
+                metasong.song.coverArt,
                 metasong.song.size,
                 conType(metasong.song.suffix!!),
                 metasong.song.suffix,

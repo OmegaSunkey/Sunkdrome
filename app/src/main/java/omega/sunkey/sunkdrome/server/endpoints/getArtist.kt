@@ -23,7 +23,7 @@ fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
             return@future
         }
         val albums = mutableListOf<AlbumsWithoutSongs>()
-        metaartist!!.albums.forEach { it ->
+        metaartist.albums.forEach { it ->
             var totalDuration = 0
             it.songs.forEach { s ->
                 totalDuration += s.duration
@@ -33,7 +33,8 @@ fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 it.album.title,
                 metaartist.artist.name,
                 it.songs.size,
-                totalDuration
+                totalDuration,
+                it.album.coverArt
             ))
         }
         success(context, SingleArtistView(

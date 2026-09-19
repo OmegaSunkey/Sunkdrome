@@ -38,7 +38,7 @@ fun search3(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
         val metasong = mutableListOf<SongData>()
         artists.forEach {
             metaartist.add(
-                ArtistData(it.artist.id, it.artist.name, it.albums.size)
+                ArtistData(it.artist.id, it.artist.name, it.albums.size, it.albums[0].album.coverArt)
             )
         }
         albums.forEach {
@@ -53,6 +53,7 @@ fun search3(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                     artist = it.artist.name,
                     songCount = it.songs.size,
                     duration = totalDuration,
+                    coverArt = it.album.coverArt
                 )
             )
         }
@@ -68,7 +69,7 @@ fun search3(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                     track = it.song.track,
                     year = it.song.year,
                     genre = it.song.genre,
-                    coverArt = null,
+                    coverArt = it.song.coverArt,
                     size = it.song.size,
                     contentType = conType(it.song.suffix!!),
                     suffix = it.song.suffix,

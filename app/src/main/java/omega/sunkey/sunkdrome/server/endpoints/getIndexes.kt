@@ -13,10 +13,11 @@ import omega.sunkey.sunkdrome.server.success
 import kotlin.collections.set
 
 fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
+    val musicFolderId = context.queryParam("musicFolderId")
     context.future(scope.future {
         val ignoredArticles = listOf("The", "El", "La", "Los", "Las")
         val allArtists = dao.getAllArtistsWithMeta()
-        val allAlbums = dao.getAllALbumsWithMeta()
+        val allAlbums = dao.getAllAlbumsWithMeta()
         val indexArtistMap = mutableMapOf<String, MutableList<ArtistData>>()
         val indexAlbumMap = mutableMapOf<String, MutableList<AlbumsWithoutSongs>>()
         val finalIndex = mutableListOf<Index>()
@@ -27,7 +28,8 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                     ArtistData(
                         metaartist.artist.id,
                         metaartist.artist.name,
-                        metaartist.albums.size
+                        metaartist.albums.size,
+                        metaartist.albums[0].album.coverArt
                     )
                 )
             } else {
@@ -35,7 +37,8 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                     ArtistData(
                         metaartist.artist.id,
                         metaartist.artist.name,
-                        metaartist.albums.size
+                        metaartist.albums.size,
+                        metaartist.albums[0].album.coverArt
                     )
                 )
             }
@@ -53,7 +56,8 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                         metaalbum.album.title,
                         metaalbum.artist.name,
                         metaalbum.songs.size,
-                        totalDuration
+                        totalDuration,
+                        metaalbum.album.coverArt
                     )
                 )
             } else {
@@ -63,7 +67,8 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                         metaalbum.album.title,
                         metaalbum.artist.name,
                         metaalbum.songs.size,
-                        totalDuration
+                        totalDuration,
+                        metaalbum.album.coverArt
                     )
                 )
             }

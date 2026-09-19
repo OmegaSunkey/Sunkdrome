@@ -20,7 +20,8 @@ data class DirectoryChild(
     val suffix: String? = null,
     val contentType: String? = null,
     val path: String? = null,
-    val created: String? = null
+    val created: String? = null,
+    val coverArt: String = ""
 )
 
 data class Directories(val directory: Directory)

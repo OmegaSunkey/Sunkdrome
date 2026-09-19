@@ -13,7 +13,8 @@ data class ArtistIndex(
 data class ArtistData(
     val id: String,
     val name: String,
-    val albumCount: Int
+    val albumCount: Int,
+    val coverArt: String
 )
 
 data class ArtistsView(
@@ -37,5 +38,6 @@ data class AlbumsWithoutSongs(
     val title: String,
     val artist: String,
     val songCount: Int,
-    val duration: Int?
+    val duration: Int?,
+    val coverArt: String
 )

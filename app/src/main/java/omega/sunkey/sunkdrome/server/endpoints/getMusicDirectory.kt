@@ -66,7 +66,8 @@ fun getMusicDirectory(context: Context, scope: CoroutineScope, dao: SubsonicDao)
                     metasong.song.suffix,
                     conType(metasong.song.suffix!!),
                     metasong.song.path,
-                    metasong.song.dateAdded.toIsoTime()
+                    metasong.song.dateAdded.toIsoTime(),
+                    metasong.song.coverArt
                 )
             )
         }
