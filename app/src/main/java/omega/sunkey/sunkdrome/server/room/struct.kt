@@ -32,6 +32,7 @@ data class Song(
     @ColumnInfo(name = "path") val path: String,
     @ColumnInfo(name = "album_id") val albumId: String,
     @ColumnInfo(name = "artist_id") val artistId: String,
+    @ColumnInfo(name = "cover_uri") val coverArt: String
 )
 
 @Entity(
@@ -49,6 +50,7 @@ data class Album(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "artist_id") val artistId: String,
     @ColumnInfo(name = "year") val year: Int? = null,
+    @ColumnInfo(name = "cover_uri") val coverArt: String
 )
 
 @Entity(
