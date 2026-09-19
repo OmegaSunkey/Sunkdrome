@@ -18,29 +18,22 @@ fun getCoverArt(context: Context, scope: CoroutineScope, dao: SubsonicDao, andro
         return
     }
     context.future(scope.future {
-        val cover = getCoverArt(androidContext, id, dao)
+        val cover = getCoverArt(androidContext, id)
         // using regular context.result(inputStream) doesn't work i dont know why, jackson explodes trying to serialize something
         if(cover != null) {
-            context.header("Content-Type", contentType(getCoverArt(androidContext, id, dao)))
+            context.header("Content-Type", contentType(getCoverArt(androidContext, id)))
             cover.use { input -> // i asked claude and it told me to override internal result object so epic
                 context.res.outputStream.use { output ->
                     input.copyTo(output)
                 }
             }
         } else {
-            return404(context)
+            reject(context, 70, "The requested content was not found.")
         }
     })
 }
 
-suspend fun getCoverArt(androidContext: android.content.Context, id: String, dao: SubsonicDao): InputStream? {
-    /*val uri = when {
-        dao.getSong(id) != null -> dao.getSong(id)!!.coverArt
-        dao.getAlbum(id) != null -> dao.getAlbum(id)!!.coverArt
-        dao.getArtistWithDetails(id) != null -> dao.getArtistWithDetails(id)!!.albums[0].album.coverArt
-        else -> null
-    }
-    if(uri == null) return null*/
+fun getCoverArt(androidContext: android.content.Context, id: String): InputStream? {
     val uri = id.toUri()
     Log.i("getCoverArt", "Uri: $uri")
     return try {
@@ -48,11 +41,6 @@ suspend fun getCoverArt(androidContext: android.content.Context, id: String, dao
     } catch (_: FileNotFoundException) {
         null
     }
-}
-
-fun return404(context: Context) {
-    context.status(404)
-    context.result("Not found")
 }
 
 fun contentType(image: InputStream?): String {
