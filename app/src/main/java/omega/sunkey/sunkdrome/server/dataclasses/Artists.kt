@@ -29,6 +29,7 @@ data class SingleArtistView(
 data class SingleArtist(
     val id: String,
     val name: String,
+    val coverArt: String,
     val albumCount: Int,
     val album: List<AlbumsWithoutSongs>
 )

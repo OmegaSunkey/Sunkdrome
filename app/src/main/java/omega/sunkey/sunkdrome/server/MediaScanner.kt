@@ -47,7 +47,7 @@ class MediaScanner (
                     val album = meta.album ?: "Unknown Album"
                     val aid = "${artid}_${album}".md5()
                     if (!albums.containsKey(aid)) {
-                        albums[aid] = Album(aid, album, artid, meta.year, file.coverUri.toString())
+                        albums[aid] = Album(aid, album, artid, meta.year, file.coverId)
                     }
 
                     val song = Song(
@@ -63,7 +63,7 @@ class MediaScanner (
                         genre = meta.genre,
                         suffix = file.displayName.substringAfterLast('.', ""),
                         dateAdded = file.dateAdded,
-                        coverArt = file.coverUri.toString()
+                        coverArt = file.coverId
                     )
                     songs.add(song)
                 }
@@ -119,7 +119,7 @@ class MediaScanner (
                 val path = cursor.getString(data)
                 val dateAdded = cursor.getLong(date)
                 val cUri = ContentUris.withAppendedId(collection, idd)
-                val coUri = ContentUris.withAppendedId("content://media/external/audio/albumart".toUri(), cursor.getLong(albumId))
+                val coUri = cursor.getLong(albumId).toString()
                 audioFiles.add(AudioFile(idd, namee, dura, size, path, dateAdded, cUri, coUri))
             }
         }
@@ -159,7 +159,7 @@ class MediaScanner (
         val path: String,
         val dateAdded: Long,
         val uri: Uri,
-        val coverUri: Uri
+        val coverId: String
     )
     private data class AudioMetadata(
         val title: String? = null,

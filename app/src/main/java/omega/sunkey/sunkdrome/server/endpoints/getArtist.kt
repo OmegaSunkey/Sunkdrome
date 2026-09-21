@@ -41,6 +41,7 @@ fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
             SingleArtist(
                 metaartist.artist.name,
                 metaartist.artist.name,
+                metaartist.albums[0].album.coverArt,
                 metaartist.albums.size,
                 albums
             )))

@@ -88,7 +88,7 @@ fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
         stream(ctx, scope, dao, context)
     }
 
-    this.get("/rest/getCoverArt.view") { ctx ->
+    this.get("/rest/getCoverArt*") { ctx ->
         getCoverArt(ctx, scope, dao, context)
     }
 }

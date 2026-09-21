@@ -1,5 +1,6 @@
 package omega.sunkey.sunkdrome.server.endpoints
 
+import android.content.ContentUris
 import android.graphics.BitmapFactory
 import android.util.Log
 import io.javalin.http.Context
@@ -17,6 +18,7 @@ fun getCoverArt(context: Context, scope: CoroutineScope, dao: SubsonicDao, andro
         reject(context, 10, "Required parameter is missing.")
         return
     }
+    Log.i("endpoint", "${context.fullUrl()}")
     context.future(scope.future {
         val cover = getCoverArt(androidContext, id)
         // using regular context.result(inputStream) doesn't work i dont know why, jackson explodes trying to serialize something
@@ -34,7 +36,7 @@ fun getCoverArt(context: Context, scope: CoroutineScope, dao: SubsonicDao, andro
 }
 
 fun getCoverArt(androidContext: android.content.Context, id: String): InputStream? {
-    val uri = id.toUri()
+    val uri = ContentUris.withAppendedId("content://media/external/audio/albumart/".toUri(), id.toLong())
     Log.i("getCoverArt", "Uri: $uri")
     return try {
         androidContext.contentResolver.openInputStream(uri)
