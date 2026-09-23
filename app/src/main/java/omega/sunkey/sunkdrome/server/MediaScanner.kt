@@ -15,7 +15,6 @@ import omega.sunkey.sunkdrome.server.room.Song
 import omega.sunkey.sunkdrome.server.room.Album
 import omega.sunkey.sunkdrome.server.room.SubsonicDatabase
 import java.security.MessageDigest
-import androidx.core.net.toUri
 
 class MediaScanner (
     context: Context,
@@ -39,15 +38,17 @@ class MediaScanner (
                 for (file in audioFiles) {
                     val meta = extractMeta(file.uri)
                     val name = meta.artist ?: "Unknown Artist"
+                    val year = file.year ?: meta.year
                     val artid = name.md5()
                     if(!artists.containsKey(artid)) {
                         artists[artid] = Artist(artid, name)
                     }
+                    val bitrate = file.bitrate ?: ((file.size * 8) / (file.duration / 1000) / 1000 ).toInt()
 
                     val album = meta.album ?: "Unknown Album"
                     val aid = "${artid}_${album}".md5()
                     if (!albums.containsKey(aid)) {
-                        albums[aid] = Album(aid, album, artid, meta.year, file.coverId)
+                        albums[aid] = Album(aid, album, artid, year, file.coverId, file.dateAdded)
                     }
 
                     val song = Song(
@@ -56,10 +57,11 @@ class MediaScanner (
                         albumId = aid,
                         artistId = artid,
                         duration = file.duration / 1000,
+                        bitrate = bitrate,
                         path = file.path,
                         size = file.size,
                         track = meta.track,
-                        year = meta.year,
+                        year = year,
                         genre = meta.genre,
                         suffix = file.displayName.substringAfterLast('.', ""),
                         dateAdded = file.dateAdded,
@@ -74,7 +76,7 @@ class MediaScanner (
                 Result.success()
             } catch (e: Exception) {
                 Log.e("MediaScanner", "oops", e)
-                Result.retry()
+                Result.failure()
             }
         }
     }
@@ -89,10 +91,12 @@ class MediaScanner (
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.DISPLAY_NAME,
             MediaStore.Audio.Media.DURATION,
+            MediaStore.Audio.Media.BITRATE,
             MediaStore.Audio.Media.SIZE,
             MediaStore.Audio.Media.DATA,
             MediaStore.Audio.Media.DATE_ADDED,
-            MediaStore.Audio.Media.ALBUM_ID
+            MediaStore.Audio.Media.ALBUM_ID,
+            MediaStore.Audio.Media.YEAR
         )
         val sortOrder = "${MediaStore.Audio.Media.DISPLAY_NAME} ASC"
 
@@ -106,21 +110,25 @@ class MediaScanner (
             val id = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
             val name = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
             val dur = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+            val bitr = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.BITRATE)
             val siz = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)
             val data = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
             val date = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATE_ADDED)
             val albumId = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
+            val year = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.YEAR)
 
             while (cursor.moveToNext()) {
                 val idd = cursor.getLong(id)
                 val namee = cursor.getString(name)
                 val dura = cursor.getInt(dur)
+                val bitrate = cursor.getInt(bitr)?.div(1000)
                 val size = cursor.getLong(siz)
                 val path = cursor.getString(data)
                 val dateAdded = cursor.getLong(date)
                 val cUri = ContentUris.withAppendedId(collection, idd)
                 val coUri = cursor.getLong(albumId).toString()
-                audioFiles.add(AudioFile(idd, namee, dura, size, path, dateAdded, cUri, coUri))
+                val yearr = cursor.getInt(year)
+                audioFiles.add(AudioFile(idd, namee, dura, bitrate, size, path, dateAdded, cUri, coUri, yearr))
             }
         }
         return audioFiles
@@ -155,11 +163,13 @@ class MediaScanner (
         val id: Long,
         val displayName: String,
         val duration: Int,
+        val bitrate: Int?,
         val size: Long,
         val path: String,
         val dateAdded: Long,
         val uri: Uri,
-        val coverId: String
+        val coverId: String,
+        val year: Int?
     )
     private data class AudioMetadata(
         val title: String? = null,
