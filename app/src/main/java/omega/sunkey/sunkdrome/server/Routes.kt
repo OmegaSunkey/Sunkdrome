@@ -29,11 +29,11 @@ fun Javalin.setBeforeHandlers() {
         //val s: String? = ctx.queryParam("s")
 
         //TODO: actual user management
-        if(u == "sunkey" && p == "sunkey") {
-            ctx.attribute("currentUser", u)
-        } else {
-            reject(ctx, 40, "Wrong username or password.")
-        }
+        if(u == null && p == null) {
+            reject(ctx, 10, "Required parameter is missing.")
+        } else if(u != "sunkey" && p != "sunkey") {
+            reject(ctx, 40, "Wrong username or password")
+        } else ctx.attribute("currentUser", u)
     }
 }
 
