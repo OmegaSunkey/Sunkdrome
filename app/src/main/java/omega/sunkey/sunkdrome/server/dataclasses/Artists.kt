@@ -1,7 +1,7 @@
 package omega.sunkey.sunkdrome.server.dataclasses
 
 data class Artists(
-    val ignoredArticles: List<String>,
+    val ignoredArticles: String,
     val index: List<ArtistIndex>
 )
 

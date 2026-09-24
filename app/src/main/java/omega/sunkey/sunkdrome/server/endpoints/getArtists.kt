@@ -44,7 +44,7 @@ fun getArtists(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 artist.value
             ))
         }
-        success(context, ArtistsView(Artists(ignoredArticles, artistIndex)))
+        success(context, ArtistsView(Artists(ignoredArticles.joinToString(), artistIndex)))
     })
 }
 
