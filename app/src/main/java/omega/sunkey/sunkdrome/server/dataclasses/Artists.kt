@@ -31,6 +31,12 @@ data class SingleArtist(
     val name: String,
     val coverArt: String,
     val albumCount: Int,
+    val userRating: Int = 0,
+    val artistImageUrl: String = "",
+    val starred: String = "",
+    val musicBrainzId: String = "",
+    val sortName: String = "",
+    val roles: List<String> = listOf(""),
     val album: List<AlbumsWithoutSongs>
 )
 

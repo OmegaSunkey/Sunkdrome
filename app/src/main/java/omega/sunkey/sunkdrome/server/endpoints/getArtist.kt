@@ -44,6 +44,9 @@ fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 metaartist.artist.name,
                 metaartist.albums[0].album.coverArt,
                 metaartist.albums.size,
-                albums
+                0,
+                "http://${context.host()}/rest/getCoverArt.view?id=${metaartist.albums[0].album.coverArt}&u=sunkey&p=sunkey", //remember to remove hardcoded creds
+                album = albums
             )))
     })
+}
