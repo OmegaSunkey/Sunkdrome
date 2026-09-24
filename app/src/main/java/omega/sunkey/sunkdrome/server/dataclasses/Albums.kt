@@ -1,7 +1,5 @@
 package omega.sunkey.sunkdrome.server.dataclasses
 
-import omega.sunkey.sunkdrome.server.room.Song
-
 data class AlbumView(
     val album: AlbumData
 )
@@ -12,6 +10,6 @@ data class AlbumData(
     val artist: String,
     val songCount: Int,
     val duration: Int?,
-    val song: List<Song>,
     val coverArt: String
+    val song: List<SongData>,
 )

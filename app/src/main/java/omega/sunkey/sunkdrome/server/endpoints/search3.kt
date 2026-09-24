@@ -75,7 +75,7 @@ fun search3(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                     contentType = conType(it.song.suffix!!),
                     suffix = it.song.suffix,
                     duration = it.song.duration,
-                    bitRate = null,
+                    bitRate = it.song.bitrate,
                     path = it.song.path,
                     discNumber = null,
                     created = it.song.dateAdded.toIsoTime(),
