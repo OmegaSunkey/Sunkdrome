@@ -52,13 +52,18 @@ fun getAlbum(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
         }
         success(context, AlbumView(
             AlbumData(
-                metaalbum.album.id,
-                metaalbum.album.title,
-                metaalbum.artist.name
-                metaalbum.songs.size,
-                totalDuration,
-                metaalbum.album.coverArt
-                songList,
+                id = metaalbum.album.id,
+                parent = metaalbum.album.artistId,
+                album = metaalbum.album.title,
+                coverArt = metaalbum.album.coverArt,
+                songCount = metaalbum.songs.size,
+                created = metaalbum.album.dateAdded.toIsoTime(),
+                duration = totalDuration,
+                artistId = metaalbum.album.artistId,
+                artist = metaalbum.artist.name,
+                year = metaalbum.album.year,
+                genre = metaalbum.songs[0].genre ?: "Unknown Genre",
+                song = songList,
             )
         ))
     })
