@@ -30,9 +30,9 @@ fun Javalin.setBeforeHandlers() {
 
         //TODO: actual user management
         if(u == null && p == null) {
-            reject(ctx, 10, "Required parameter is missing.")
+            reject(ctx, Reject.MISSINGPARAM)
         } else if(u != "sunkey" && p != "sunkey") {
-            reject(ctx, 40, "Wrong username or password")
+            reject(ctx, Reject.WRONGAUTH)
         } else ctx.attribute("currentUser", u)
     }
 }

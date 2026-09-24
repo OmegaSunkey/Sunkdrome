@@ -3,6 +3,7 @@ package omega.sunkey.sunkdrome.server.endpoints
 import io.javalin.http.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
+import omega.sunkey.sunkdrome.server.Reject
 import omega.sunkey.sunkdrome.server.dataclasses.Directories
 import omega.sunkey.sunkdrome.server.dataclasses.Directory
 import omega.sunkey.sunkdrome.server.dataclasses.DirectoryChild
@@ -18,14 +19,14 @@ import java.net.URLEncoder
 fun getMusicDirectory(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
     val id = context.queryParam("id")
     if(id == null) {
-        reject(context, 10, "Required parameter is missing.")
+        reject(context, Reject.MISSINGPARAM)
         return
     }
     context.future(scope.future {
         val path = URLDecoder.decode(id, "UTF-8")
         val allSongs = dao.getSongsByPath(path)
         if(allSongs.isEmpty()) {
-            reject(context, 70, "The requested data was not found.")
+            reject(context, Reject.NODATA)
             return@future
         }
         val songs = mutableListOf<SongWithMetadata>()

@@ -5,6 +5,7 @@ import android.provider.MediaStore
 import io.javalin.http.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
+import omega.sunkey.sunkdrome.server.Reject
 import omega.sunkey.sunkdrome.server.dataclasses.conType
 import omega.sunkey.sunkdrome.server.reject
 import omega.sunkey.sunkdrome.server.room.SubsonicDao
@@ -12,13 +13,13 @@ import omega.sunkey.sunkdrome.server.room.SubsonicDao
 fun stream(context: Context, scope: CoroutineScope, dao: SubsonicDao, androidContext: android.content.Context) {
     val id = context.queryParam("id")
     if(id == null) {
-        reject(context, 10, "Required parameter is missing.")
+        reject(context, Reject.MISSINGPARAM)
         return
     }
     context.future(scope.future {
         val song = dao.getSongWithMeta(id)
         if(song == null) {
-            reject(context, 70, "The requested content was not found.")
+            reject(context, Reject.NODATA)
             return@future
         }
         val range = parseRangeHeader(context.header("Range"), song.song.size.toInt())

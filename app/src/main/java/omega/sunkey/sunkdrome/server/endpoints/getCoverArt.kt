@@ -10,12 +10,13 @@ import omega.sunkey.sunkdrome.server.reject
 import omega.sunkey.sunkdrome.server.room.SubsonicDao
 import java.io.InputStream
 import androidx.core.net.toUri
+import omega.sunkey.sunkdrome.server.Reject
 import java.io.FileNotFoundException
 
 fun getCoverArt(context: Context, scope: CoroutineScope, dao: SubsonicDao, androidContext: android.content.Context) {
     val id = context.queryParam("id")
     if(id == null) {
-        reject(context, 10, "Required parameter is missing.")
+        reject(context, Reject.MISSINGPARAM)
         return
     }
     Log.i("endpoint", "${context.fullUrl()}")
@@ -30,7 +31,7 @@ fun getCoverArt(context: Context, scope: CoroutineScope, dao: SubsonicDao, andro
                 }
             }
         } else {
-            reject(context, 70, "The requested content was not found.")
+            reject(context, Reject.NODATA)
         }
     })
 }

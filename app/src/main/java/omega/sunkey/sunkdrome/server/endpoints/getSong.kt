@@ -3,6 +3,7 @@ package omega.sunkey.sunkdrome.server.endpoints
 import io.javalin.http.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
+import omega.sunkey.sunkdrome.server.Reject
 import omega.sunkey.sunkdrome.server.dataclasses.SongData
 import omega.sunkey.sunkdrome.server.dataclasses.SongView
 import omega.sunkey.sunkdrome.server.dataclasses.conType
@@ -14,13 +15,13 @@ import omega.sunkey.sunkdrome.server.toIsoTime
 fun getSong(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
     val id = context.queryParam("id")
     if(id == null) {
-        reject(context, 10, "Required parameter is missing.")
+        reject(context, Reject.MISSINGPARAM)
         return
     }
     context.future(scope.future {
         val metasong = dao.getSongWithMeta(id)
         if (metasong == null) {
-            reject(context, 70, "The requested data was not found.")
+            reject(context, Reject.NODATA)
             return@future
         }
         success(context, SongView(

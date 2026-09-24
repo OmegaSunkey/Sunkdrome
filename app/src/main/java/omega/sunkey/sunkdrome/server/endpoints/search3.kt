@@ -3,6 +3,7 @@ package omega.sunkey.sunkdrome.server.endpoints
 import io.javalin.http.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
+import omega.sunkey.sunkdrome.server.Reject
 import omega.sunkey.sunkdrome.server.dataclasses.AlbumsWithoutSongs
 import omega.sunkey.sunkdrome.server.dataclasses.ArtistData
 import omega.sunkey.sunkdrome.server.dataclasses.Search
@@ -18,7 +19,7 @@ import kotlin.math.min
 fun search3(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
     val query = context.queryParam("query")
     if (query == null) {
-        reject(context, 10, "Required parameter is missing.")
+        reject(context, Reject.MISSINGPARAM)
         return
     }
     val artistCount = if(context.queryParam("artistCount") != null) min(context.queryParam("artistCount")!!.toInt(), 40) else 20

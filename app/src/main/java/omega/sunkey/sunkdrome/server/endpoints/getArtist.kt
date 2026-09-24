@@ -3,6 +3,7 @@ package omega.sunkey.sunkdrome.server.endpoints
 import io.javalin.http.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
+import omega.sunkey.sunkdrome.server.Reject
 import omega.sunkey.sunkdrome.server.dataclasses.AlbumsWithoutSongs
 import omega.sunkey.sunkdrome.server.dataclasses.SingleArtist
 import omega.sunkey.sunkdrome.server.dataclasses.SingleArtistView
@@ -13,13 +14,13 @@ import omega.sunkey.sunkdrome.server.success
 fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
     val id = context.queryParam("id")
     if(id == null) {
-        reject(context, 10, "Required parameter is missing.")
+        reject(context, Reject.MISSINGPARAM)
         return
     }
     context.future(scope.future {
         val metaartist = dao.getArtistWithDetails(id)
         if (metaartist == null) {
-            reject(context, 70, "The requested data was not found.")
+            reject(context, Reject.NODATA)
             return@future
         }
         val albums = mutableListOf<AlbumsWithoutSongs>()
@@ -46,4 +47,3 @@ fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 albums
             )))
     })
-}
