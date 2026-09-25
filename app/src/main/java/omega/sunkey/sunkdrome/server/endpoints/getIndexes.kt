@@ -91,6 +91,6 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 )
             )
         }
-        success(context, IndexesView(Indexes(ignoredArticles, finalIndex)))
+        success(context, IndexesView(Indexes(ignoredArticles.joinToString(), finalIndex)))
     })
 }

@@ -3,7 +3,7 @@ package omega.sunkey.sunkdrome.server.dataclasses
 import com.fasterxml.jackson.annotation.JsonInclude
 
 data class Indexes(
-    val ignoredArticles: List<String>,
+    val ignoredArticles: String,
     val index: List<Index>
 )
 
