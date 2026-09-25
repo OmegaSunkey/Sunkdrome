@@ -4,12 +4,13 @@ import io.javalin.http.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
 import omega.sunkey.sunkdrome.server.Reject
-import omega.sunkey.sunkdrome.server.dataclasses.AlbumsWithoutSongs
+import omega.sunkey.sunkdrome.server.dataclasses.AlbumData
 import omega.sunkey.sunkdrome.server.dataclasses.SingleArtist
 import omega.sunkey.sunkdrome.server.dataclasses.SingleArtistView
 import omega.sunkey.sunkdrome.server.reject
 import omega.sunkey.sunkdrome.server.room.SubsonicDao
 import omega.sunkey.sunkdrome.server.success
+import omega.sunkey.sunkdrome.server.toIsoTime
 
 fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
     val id = context.queryParam("id")
@@ -23,19 +24,25 @@ fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
             reject(context, Reject.NODATA)
             return@future
         }
-        val albums = mutableListOf<AlbumsWithoutSongs>()
+        val albums = mutableListOf<AlbumData>()
         metaartist.albums.forEach { it ->
             var totalDuration = 0
             it.songs.forEach { s ->
                 totalDuration += s.duration
             }
-            albums.add(AlbumsWithoutSongs(
-                it.album.id,
-                it.album.title,
-                metaartist.artist.name,
-                it.songs.size,
-                totalDuration,
-                it.album.coverArt
+            albums.add(AlbumData(
+                id = it.album.id,
+                parent = it.album.artistId,
+                album = it.album.title,
+                title = it.album.title,
+                name = it.album.title,
+                coverArt = it.album.coverArt,
+                songCount = it.songs.size,
+                created = it.album.dateAdded.toIsoTime(),
+                duration = totalDuration,
+                artistId = metaartist.artist.id,
+                artist = metaartist.artist.name,
+                year = it.album.year ?: 2000,
             ))
         }
         success(context, SingleArtistView(

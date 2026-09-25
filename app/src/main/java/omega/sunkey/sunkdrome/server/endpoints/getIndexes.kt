@@ -3,13 +3,14 @@ package omega.sunkey.sunkdrome.server.endpoints
 import io.javalin.http.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
-import omega.sunkey.sunkdrome.server.dataclasses.AlbumsWithoutSongs
+import omega.sunkey.sunkdrome.server.dataclasses.AlbumData
 import omega.sunkey.sunkdrome.server.dataclasses.ArtistData
 import omega.sunkey.sunkdrome.server.dataclasses.Index
 import omega.sunkey.sunkdrome.server.dataclasses.Indexes
 import omega.sunkey.sunkdrome.server.dataclasses.IndexesView
 import omega.sunkey.sunkdrome.server.room.SubsonicDao
 import omega.sunkey.sunkdrome.server.success
+import omega.sunkey.sunkdrome.server.toIsoTime
 import kotlin.collections.set
 
 fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
@@ -19,7 +20,7 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
         val allArtists = dao.getAllArtistsWithMeta()
         val allAlbums = dao.getAllAlbumsWithMeta()
         val indexArtistMap = mutableMapOf<String, MutableList<ArtistData>>()
-        val indexAlbumMap = mutableMapOf<String, MutableList<AlbumsWithoutSongs>>()
+        val indexAlbumMap = mutableMapOf<String, MutableList<AlbumData>>()
         val finalIndex = mutableListOf<Index>()
         for(metaartist in allArtists) {
             val fChar = getFirstChar(metaartist.artist.name, ignoredArticles)
@@ -51,24 +52,32 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
             }
             if(indexAlbumMap.containsKey(fChar)) {
                 indexAlbumMap[fChar]!!.add(
-                    AlbumsWithoutSongs(
-                        metaalbum.album.id,
-                        metaalbum.album.title,
-                        metaalbum.artist.name,
-                        metaalbum.songs.size,
-                        totalDuration,
-                        metaalbum.album.coverArt
+                    AlbumData(
+                        id = metaalbum.album.id,
+                        parent = metaalbum.album.artistId,
+                        album = metaalbum.album.title,
+                        coverArt = metaalbum.album.coverArt,
+                        songCount = metaalbum.songs.size,
+                        created = metaalbum.album.dateAdded.toIsoTime(),
+                        duration = totalDuration,
+                        artistId = metaalbum.artist.id,
+                        artist = metaalbum.artist.name,
+                        year = metaalbum.album.year ?: 2000
                     )
                 )
             } else {
                 indexAlbumMap[fChar] = mutableListOf(
-                    AlbumsWithoutSongs(
-                        metaalbum.album.id,
-                        metaalbum.album.title,
-                        metaalbum.artist.name,
-                        metaalbum.songs.size,
-                        totalDuration,
-                        metaalbum.album.coverArt
+                    AlbumData(
+                        id = metaalbum.album.id,
+                        parent = metaalbum.album.artistId,
+                        album = metaalbum.album.title,
+                        coverArt = metaalbum.album.coverArt,
+                        songCount = metaalbum.songs.size,
+                        created = metaalbum.album.dateAdded.toIsoTime(),
+                        duration = totalDuration,
+                        artistId = metaalbum.artist.id,
+                        artist = metaalbum.artist.name,
+                        year = metaalbum.album.year ?: 2000
                     )
                 )
             }

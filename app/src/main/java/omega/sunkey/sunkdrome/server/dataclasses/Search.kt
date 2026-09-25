@@ -6,6 +6,6 @@ data class SearchView(
 
 data class Search(
     val artist: List<ArtistData>,
-    val album: List<AlbumsWithoutSongs>,
+    val album: List<AlbumData>,
     val song: List<SongData>
 )

@@ -28,6 +28,7 @@ data class Song(
     @ColumnInfo(name = "size") val size: Long = 0,
     @ColumnInfo(name = "suffix") val suffix: String? = "",
     @ColumnInfo(name = "duration") val duration: Int,
+    @ColumnInfo(name = "bitrate") val bitrate: Int? = null,
     @ColumnInfo(name = "date_added") val dateAdded: Long = 0,
     @ColumnInfo(name = "path") val path: String,
     @ColumnInfo(name = "album_id") val albumId: String,
@@ -50,7 +51,8 @@ data class Album(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "artist_id") val artistId: String,
     @ColumnInfo(name = "year") val year: Int? = null,
-    @ColumnInfo(name = "cover_uri") val coverArt: String
+    @ColumnInfo(name = "cover_uri") val coverArt: String,
+    @ColumnInfo(name = "date_added") val dateAdded: Long = 0
 )
 
 @Entity(

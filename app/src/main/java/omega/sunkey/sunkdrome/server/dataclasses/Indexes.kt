@@ -9,10 +9,10 @@ data class Indexes(
 
 data class Index(
     val name: String,
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @param:JsonInclude(JsonInclude.Include.NON_EMPTY)
     val artist: List<ArtistData>,
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val child: List<AlbumsWithoutSongs>
+    @param:JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val child: List<AlbumData>
 )
 
 data class IndexesView(

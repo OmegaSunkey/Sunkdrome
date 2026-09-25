@@ -37,14 +37,5 @@ data class SingleArtist(
     val musicBrainzId: String = "",
     val sortName: String = "",
     val roles: List<String> = listOf(""),
-    val album: List<AlbumsWithoutSongs>
-)
-
-data class AlbumsWithoutSongs(
-    val id: String,
-    val title: String,
-    val artist: String,
-    val songCount: Int,
-    val duration: Int?,
-    val coverArt: String
+    val album: List<AlbumData>
 )

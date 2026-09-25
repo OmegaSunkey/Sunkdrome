@@ -4,7 +4,7 @@ import io.javalin.http.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
 import omega.sunkey.sunkdrome.server.Reject
-import omega.sunkey.sunkdrome.server.dataclasses.AlbumsWithoutSongs
+import omega.sunkey.sunkdrome.server.dataclasses.AlbumData
 import omega.sunkey.sunkdrome.server.dataclasses.ArtistData
 import omega.sunkey.sunkdrome.server.dataclasses.Search
 import omega.sunkey.sunkdrome.server.dataclasses.SearchView
@@ -35,7 +35,7 @@ fun search3(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
         val albums = dao.searchAlbums(query, albumCount, albumOffset)
         val songs = dao.searchSongs(query, songCount, songOffset)
         val metaartist = mutableListOf<ArtistData>()
-        val metaalbum = mutableListOf<AlbumsWithoutSongs>()
+        val metaalbum = mutableListOf<AlbumData>()
         val metasong = mutableListOf<SongData>()
         artists.forEach {
             metaartist.add(
@@ -48,13 +48,17 @@ fun search3(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 totalDuration += it.duration
             }
             metaalbum.add(
-                AlbumsWithoutSongs(
-                    it.album.id,
-                    title = it.album.title,
-                    artist = it.artist.name,
+                AlbumData(
+                    id = it.album.id,
+                    parent = it.album.artistId,
+                    album = it.album.title,
+                    coverArt = it.album.coverArt,
                     songCount = it.songs.size,
+                    created = it.album.dateAdded.toIsoTime(),
                     duration = totalDuration,
-                    coverArt = it.album.coverArt
+                    artistId = it.artist.id,
+                    artist = it.artist.name,
+                    year = it.album.year ?: 2000
                 )
             )
         }

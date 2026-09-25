@@ -1,5 +1,7 @@
 package omega.sunkey.sunkdrome.server.dataclasses
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 data class AlbumView(
     val album: AlbumData
 )
@@ -20,5 +22,9 @@ data class AlbumData(
     val artist: String,
     val year: Int? = 2000,
     val genre: String = "",
-    val song: List<SongData>,
+    val userRating: Int = 0,
+    val averageRating: Int = 0,
+    val starred: String? = null,
+    @param:JsonInclude(JsonInclude.Include.NON_NULL)
+    val song: List<SongData>? = null,
 )
