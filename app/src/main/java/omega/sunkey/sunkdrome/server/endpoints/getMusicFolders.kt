@@ -12,10 +12,13 @@ import omega.sunkey.sunkdrome.server.success
 fun getMusicFolders(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
     context.future(scope.future {
         val allpaths = dao.getAllSongPaths()
-        val dcpaths = ArrayList<MusicFolder>()
+        val dcpaths = mutableMapOf<Int, MusicFolder>()
         for (path in allpaths) {
-            dcpaths.add(MusicFolder(path, path.substringAfterLast("/")))
+            val key = path.substringBeforeLast("/").substringAfterLast("/").hashCode()
+            if(!dcpaths.containsKey(key)) {
+                dcpaths[key] = MusicFolder(key, path.substringBeforeLast("/").substringAfterLast("/"))
+            }
         }
-        success(context, MusicFoldersView(MusicFolders(dcpaths.toList())))
+        success(context, MusicFoldersView(MusicFolders(dcpaths.values.toList())))
     })
 }

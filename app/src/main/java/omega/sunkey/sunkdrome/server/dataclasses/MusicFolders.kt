@@ -9,6 +9,6 @@ data class MusicFolders(
 )
 
 data class MusicFolder(
-    val id: String,
+    val id: Int,
     val name: String
 )
