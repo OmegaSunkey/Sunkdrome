@@ -8,6 +8,8 @@ import omega.sunkey.sunkdrome.server.dataclasses.License
 import omega.sunkey.sunkdrome.server.dataclasses.LicenseView
 import omega.sunkey.sunkdrome.server.dataclasses.OpenSubsonicExtensionsPayload
 import omega.sunkey.sunkdrome.server.endpoints.getAlbum
+import omega.sunkey.sunkdrome.server.endpoints.getAlbumList
+import omega.sunkey.sunkdrome.server.endpoints.getAlbumList2
 import omega.sunkey.sunkdrome.server.endpoints.getArtist
 import omega.sunkey.sunkdrome.server.endpoints.getArtists
 import omega.sunkey.sunkdrome.server.endpoints.getCoverArt
@@ -69,6 +71,14 @@ fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
 
     this.get("/rest/getArtist*") { ctx ->
         getArtist(ctx, scope, dao)
+    }
+
+    this.get("/rest/getAlbumList2*") { ctx ->
+        getAlbumList2(ctx, scope, dao)
+    }
+
+    this.get("/rest/getAlbumList*") { ctx ->
+        getAlbumList(ctx, scope, dao)
     }
 
     this.get("/rest/getAlbum*") { ctx ->
