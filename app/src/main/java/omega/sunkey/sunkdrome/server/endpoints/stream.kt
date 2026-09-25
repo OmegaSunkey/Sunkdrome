@@ -1,6 +1,7 @@
 package omega.sunkey.sunkdrome.server.endpoints
 
 import android.content.ContentUris
+import android.os.Build
 import android.provider.MediaStore
 import io.javalin.http.Context
 import kotlinx.coroutines.CoroutineScope
@@ -16,6 +17,7 @@ fun stream(context: Context, scope: CoroutineScope, dao: SubsonicDao, androidCon
         reject(context, Reject.MISSINGPARAM)
         return
     }
+    context.header("Accept-Ranges", "bytes")
     context.future(scope.future {
         val song = dao.getSongWithMeta(id)
         if(song == null) {
@@ -30,15 +32,21 @@ fun stream(context: Context, scope: CoroutineScope, dao: SubsonicDao, androidCon
 fun sendStream(context: Context, id: String, mime: String, size: Long, range: Pair<Int, Int>?, androidContext: android.content.Context) {
     context.contentType(mime)
 
+    val mediaURI = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+    } else {
+        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+    }
+
     val uri = ContentUris.withAppendedId(
-        MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL),
+        mediaURI,
         id.toLong()
     )
     val inputStream = androidContext.contentResolver.openInputStream(uri)
     if (inputStream != null && range != null) {
         val buffer = ByteArray(range.second - range.first)
-        inputStream.read(buffer, range.first, range.second)
-        context.header("Content-Length", buffer.size.toString())
+        inputStream.read(buffer, 0, range.second - range.first)
+        context.header("Content-Length", "${buffer.size}")
         context.header("Content-Range", "bytes ${range.first}-${range.second}/$size")
         context.status(206)
         context.result(buffer)
@@ -51,12 +59,12 @@ fun sendStream(context: Context, id: String, mime: String, size: Long, range: Pa
 fun parseRangeHeader(range: String?, fileSize: Int): Pair<Int, Int>? {
     if (range == null) return null
     val rangeStart = range.removePrefix("bytes=").split("-")[0].toIntOrNull()
-    val rangeEnd = range.removePrefix("bytes=").split("-")[0].toIntOrNull()
+    val rangeEnd = range.removePrefix("bytes=").split("-")[1].toIntOrNull()
 
     return when {
         rangeStart == null && rangeEnd != null -> Pair(maxOf(0, fileSize - rangeEnd), fileSize - 1)
-        rangeStart != null && rangeEnd == null && rangeStart >= fileSize -> Pair(rangeStart, fileSize)
-        rangeStart != null && rangeEnd != null && rangeStart >= fileSize -> Pair(rangeStart, minOf(rangeEnd, fileSize - 1))
+        rangeStart != null && rangeEnd == null && rangeStart <= fileSize -> Pair(rangeStart, fileSize)
+        rangeStart != null && rangeEnd != null && rangeStart <= fileSize -> Pair(rangeStart, minOf(rangeEnd, fileSize - 1))
         else -> null
     }
 }
