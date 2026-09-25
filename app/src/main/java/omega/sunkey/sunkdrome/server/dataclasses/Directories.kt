@@ -20,14 +20,14 @@ data class DirectoryChild(
     val suffix: String? = null,
     val contentType: String? = null,
     val path: String? = null,
-    val created: String? = null,
+    val created: String? = "2021-07-22T02:09:31+00:00",
     val coverArt: String = ""
 )
 
 data class Directories(val directory: Directory)
 
-fun conType(suf: String): String {
-    return when (suf.lowercase()) {
+fun conType(suf: String?): String {
+    return when (suf?.lowercase()) {
         "mp3" -> "audio/mpeg"
         "flac" -> "audio/flac"
         "wav" -> "audio/wav"
