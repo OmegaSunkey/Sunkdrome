@@ -28,3 +28,15 @@ data class AlbumData(
     @param:JsonInclude(JsonInclude.Include.NON_NULL)
     val song: List<SongData>? = null,
 )
+
+data class AlbumListView1(
+    val albumList: AlbumListView2
+)
+
+data class AlbumListViewNew(
+    val albumList2: AlbumListView2 //insanity actually its literally the same response
+)
+
+data class AlbumListView2(
+    val album: List<AlbumData>
+)
