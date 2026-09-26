@@ -7,6 +7,8 @@ import kotlinx.coroutines.CoroutineScope
 import omega.sunkey.sunkdrome.server.dataclasses.License
 import omega.sunkey.sunkdrome.server.dataclasses.LicenseView
 import omega.sunkey.sunkdrome.server.dataclasses.OpenSubsonicExtensionsPayload
+import omega.sunkey.sunkdrome.server.endpoints.createPlaylist
+import omega.sunkey.sunkdrome.server.endpoints.deletePlaylist
 import omega.sunkey.sunkdrome.server.endpoints.getAlbum
 import omega.sunkey.sunkdrome.server.endpoints.getAlbumList
 import omega.sunkey.sunkdrome.server.endpoints.getAlbumList2
@@ -16,9 +18,12 @@ import omega.sunkey.sunkdrome.server.endpoints.getCoverArt
 import omega.sunkey.sunkdrome.server.endpoints.getIndexes
 import omega.sunkey.sunkdrome.server.endpoints.getMusicDirectory
 import omega.sunkey.sunkdrome.server.endpoints.getMusicFolders
+import omega.sunkey.sunkdrome.server.endpoints.getPlaylist
+import omega.sunkey.sunkdrome.server.endpoints.getPlaylists
 import omega.sunkey.sunkdrome.server.endpoints.getSong
 import omega.sunkey.sunkdrome.server.endpoints.search3
 import omega.sunkey.sunkdrome.server.endpoints.stream
+import omega.sunkey.sunkdrome.server.endpoints.updatePlaylist
 import omega.sunkey.sunkdrome.server.room.SubsonicDatabase
 import java.security.MessageDigest
 import java.time.Instant
@@ -103,6 +108,26 @@ fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
 
     this.get("/rest/getCoverArt*") { ctx ->
         getCoverArt(ctx, scope, dao, context)
+    }
+
+    this.get("/rest/getPlaylists*") { ctx ->
+        getPlaylists(ctx, scope, dao)
+    }
+
+    this.get("/rest/getPlaylist*") { ctx ->
+        getPlaylist(ctx, scope, dao)
+    }
+
+    this.get("/rest/createPlaylist*") { ctx ->
+        createPlaylist(ctx, scope, dao)
+    }
+
+    this.get("/rest/updatePlaylist*") { ctx ->
+        updatePlaylist(ctx, scope, dao)
+    }
+
+    this.get("/rest/deletePlaylist*") { ctx ->
+        deletePlaylist(ctx, scope, dao)
     }
 
     this.error(404) { ctx ->
