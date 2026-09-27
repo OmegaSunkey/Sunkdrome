@@ -21,10 +21,10 @@ fun getCoverArt(context: Context, scope: CoroutineScope, dao: SubsonicDao, andro
     }
     Log.i("endpoint", "${context.fullUrl()}")
     context.future(scope.future {
-        val cover = getCoverArt(androidContext, id)
+        val cover = getCoverArt(androidContext, id, dao, context)
         // using regular context.result(inputStream) doesn't work i dont know why, jackson explodes trying to serialize something
         if(cover != null) {
-            context.header("Content-Type", contentType(getCoverArt(androidContext, id)))
+            context.header("Content-Type", contentType(getCoverArt(androidContext, id, dao, context)))
             cover.use { input -> // i asked claude and it told me to override internal result object so epic
                 context.res.outputStream.use { output ->
                     input.copyTo(output)
@@ -36,8 +36,17 @@ fun getCoverArt(context: Context, scope: CoroutineScope, dao: SubsonicDao, andro
     })
 }
 
-fun getCoverArt(androidContext: android.content.Context, id: String): InputStream? {
-    val uri = ContentUris.withAppendedId("content://media/external/audio/albumart/".toUri(), id.toLong())
+suspend fun getCoverArt(androidContext: android.content.Context, id: String, dao: SubsonicDao, context: Context): InputStream? {
+    val uri = if (id.toLongOrNull() != null) {
+        ContentUris.withAppendedId("content://media/external/audio/albumart/".toUri(), id.toLong())
+    } else {
+        val playlist = dao.getPlaylist(id)
+        if (playlist == null || playlist.songs?.isEmpty() == true) {
+            reject(context, Reject.NODATA)
+            return null
+        }
+        ContentUris.withAppendedId("content://media/external/audio/albumart/".toUri(), playlist.songs!![0].song.coverArt.toLong())
+    }
     Log.i("getCoverArt", "Uri: $uri")
     return try {
         androidContext.contentResolver.openInputStream(uri)
