@@ -15,7 +15,7 @@ data class AlbumData(
     val isDir: Boolean = true,
     val coverArt: String,
     val songCount: Int,
-    val created: String = "2021-07-22T02:09:31+00:00",
+    val created: String? = "2021-07-22T02:09:31+00:00",
     val duration: Int? = 0,
     val playCount: Int = 0,
     val artistId: String,
