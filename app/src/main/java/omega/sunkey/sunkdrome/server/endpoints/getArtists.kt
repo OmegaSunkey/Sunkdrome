@@ -9,6 +9,7 @@ import omega.sunkey.sunkdrome.server.dataclasses.Artists
 import omega.sunkey.sunkdrome.server.dataclasses.ArtistsView
 import omega.sunkey.sunkdrome.server.room.SubsonicDao
 import omega.sunkey.sunkdrome.server.success
+import omega.sunkey.sunkdrome.server.toIsoTime
 
 fun getArtists(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
     val ignoredArticles = listOf("The", "El", "La", "Los", "Las")
@@ -24,7 +25,9 @@ fun getArtists(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                         metaartist.artist.id,
                         metaartist.artist.name,
                         metaartist.albums.size,
-                        metaartist.albums[0].album.coverArt
+                        metaartist.albums[0].album.coverArt,
+                        metaartist.artist.userRating ?: 0,
+                        metaartist.artist.starred?.toIsoTime()
                     )
                 )
             } else {
@@ -33,7 +36,9 @@ fun getArtists(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                         metaartist.artist.id,
                         metaartist.artist.name,
                         metaartist.albums.size,
-                        metaartist.albums[0].album.coverArt
+                        metaartist.albums[0].album.coverArt,
+                        metaartist.artist.userRating ?: 0,
+                        metaartist.artist.starred?.toIsoTime()
                     )
                 )
             }

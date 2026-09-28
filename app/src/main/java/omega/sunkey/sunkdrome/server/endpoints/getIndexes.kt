@@ -62,7 +62,9 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                         duration = totalDuration,
                         artistId = metaalbum.artist.id,
                         artist = metaalbum.artist.name,
-                        year = metaalbum.album.year ?: 2000
+                        year = metaalbum.album.year ?: 2000,
+                        userRating = metaalbum.album.userRating ?: 0,
+                        starred = metaalbum.album.starred?.toIsoTime()
                     )
                 )
             } else {
@@ -77,7 +79,9 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                         duration = totalDuration,
                         artistId = metaalbum.artist.id,
                         artist = metaalbum.artist.name,
-                        year = metaalbum.album.year ?: 2000
+                        year = metaalbum.album.year ?: 2000,
+                        userRating = metaalbum.album.userRating ?: 0,
+                        starred = metaalbum.album.starred?.toIsoTime()
                     )
                 )
             }

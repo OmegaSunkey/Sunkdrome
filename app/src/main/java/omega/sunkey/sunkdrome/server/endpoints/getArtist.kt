@@ -43,6 +43,8 @@ fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 artistId = metaartist.artist.id,
                 artist = metaartist.artist.name,
                 year = it.album.year ?: 2000,
+                userRating = it.album.userRating ?: 0,
+                starred = it.album.starred?.toIsoTime()
             ))
         }
         success(context, SingleArtistView(
@@ -53,6 +55,7 @@ fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 metaartist.albums.size,
                 0,
                 "http://${context.host()}/rest/getCoverArt.view?id=${metaartist.albums[0].album.coverArt}&u=sunkey&p=sunkey", //remember to remove hardcoded creds
+                metaartist.artist.starred?.toIsoTime(),
                 album = albums
             )))
     })

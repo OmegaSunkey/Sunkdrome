@@ -65,6 +65,8 @@ fun getAlbum(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 year = metaalbum.album.year,
                 genre = metaalbum.songs[0].genre ?: "Unknown Genre",
                 song = songList,
+                userRating = metaalbum.album.userRating ?: 0,
+                starred = metaalbum.album.starred?.toIsoTime()
             )
         ))
     })

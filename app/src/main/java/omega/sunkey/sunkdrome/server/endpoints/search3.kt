@@ -58,7 +58,9 @@ fun search3(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                     duration = totalDuration,
                     artistId = it.artist.id,
                     artist = it.artist.name,
-                    year = it.album.year ?: 2000
+                    year = it.album.year ?: 2000,
+                    userRating = it.album.userRating ?: 0,
+                    starred = it.album.starred?.toIsoTime()
                 )
             )
         }
