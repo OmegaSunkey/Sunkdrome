@@ -81,7 +81,7 @@ fun search3(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                     duration = it.song.duration,
                     bitRate = it.song.bitrate,
                     path = it.song.path,
-                    discNumber = null,
+                    discNumber = it.song.discNumber,
                     created = it.song.dateAdded.toIsoTime(),
                     albumId = it.song.albumId,
                     artistId = it.song.artistId

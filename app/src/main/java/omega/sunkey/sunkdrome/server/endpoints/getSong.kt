@@ -43,7 +43,7 @@ fun getSong(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 metasong.song.duration,
                 metasong.song.bitrate,
                 metasong.song.path,
-                null,
+                metasong.song.discNumber,
                 metasong.song.dateAdded.toIsoTime(),
                 metasong.song.albumId,
                 metasong.song.artistId,

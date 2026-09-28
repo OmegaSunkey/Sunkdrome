@@ -24,6 +24,7 @@ data class Song(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "track") val track: Int? = null,
+    @ColumnInfo(name = "disc_number") val discNumber: Int? = null,
     @ColumnInfo(name = "year") val year: Int? = null,
     @ColumnInfo(name = "genre") val genre: String? = null,
     @ColumnInfo(name = "size") val size: Long = 0,
