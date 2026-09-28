@@ -41,6 +41,6 @@ fun star(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
             }
             else -> null
         }
-        if (star != null) dao.addStar(star) else reject(context, Reject.NODATA); return@future
+        if (star != null) dao.addStar(star) else reject(context, Reject.GENERIC); return@future
     })
 }
