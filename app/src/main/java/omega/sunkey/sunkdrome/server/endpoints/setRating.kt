@@ -7,6 +7,7 @@ import omega.sunkey.sunkdrome.server.Reject
 import omega.sunkey.sunkdrome.server.reject
 import omega.sunkey.sunkdrome.server.room.Starred
 import omega.sunkey.sunkdrome.server.room.SubsonicDao
+import omega.sunkey.sunkdrome.server.success
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
@@ -54,6 +55,12 @@ fun setRating(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
             }
             else -> null
         }
-        if (star != null) dao.addStar(star) else reject(context, Reject.GENERIC); return@future
+        if (star != null) {
+            dao.addStar(star)
+            success(context, null)
+        } else {
+            reject(context, Reject.GENERIC)
+            return@future
+        }
     })
 }
