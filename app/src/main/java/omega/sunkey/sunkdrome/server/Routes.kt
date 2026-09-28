@@ -22,7 +22,9 @@ import omega.sunkey.sunkdrome.server.endpoints.getPlaylist
 import omega.sunkey.sunkdrome.server.endpoints.getPlaylists
 import omega.sunkey.sunkdrome.server.endpoints.getSong
 import omega.sunkey.sunkdrome.server.endpoints.search3
+import omega.sunkey.sunkdrome.server.endpoints.star
 import omega.sunkey.sunkdrome.server.endpoints.stream
+import omega.sunkey.sunkdrome.server.endpoints.unstar
 import omega.sunkey.sunkdrome.server.endpoints.updatePlaylist
 import omega.sunkey.sunkdrome.server.room.SubsonicDatabase
 import java.security.MessageDigest
@@ -130,6 +132,14 @@ fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
 
     this.get("/rest/deletePlaylist*") { ctx ->
         deletePlaylist(ctx, scope, dao)
+    }
+
+    this.get("/rest/star*") { ctx ->
+        star(ctx, scope, dao)
+    }
+
+    this.get("/rest/unstar*") { ctx ->
+        unstar(ctx, scope, dao)
     }
 
     this.error(404) { ctx ->

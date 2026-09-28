@@ -147,4 +147,18 @@ interface SubsonicDao {
 
     @Query("SELECT MAX(order_index) FROM playlist_songs WHERE playlist_id = :playlistId")
     suspend fun getMaxOrderIndex(playlistId: String): Int?
+
+    //Starring section
+
+    @Insert(onConflict = REPLACE)
+    suspend fun addStar(item: Starred)
+
+    @Query("DELETE FROM starred WHERE id = :id")
+    suspend fun removeStar(id: String)
+
+    @Query("SELECT * FROM starred WHERE starred IS NOT NULL")
+    suspend fun getAllStarred(): List<Starred>
+
+    @Query("SELECT * FROM starred WHERE id = :id")
+    suspend fun getStarred(id: String): Starred?
 }

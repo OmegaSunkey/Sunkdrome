@@ -35,7 +35,9 @@ data class Song(
     @ColumnInfo(name = "path") val path: String,
     @ColumnInfo(name = "album_id") val albumId: String,
     @ColumnInfo(name = "artist_id") val artistId: String,
-    @ColumnInfo(name = "cover_uri") val coverArt: String
+    @ColumnInfo(name = "cover_uri") val coverArt: String,
+    @ColumnInfo(name = "starred") val starred: Long? = null,
+    @ColumnInfo(name = "user_rating") val userRating: Int? = null
 )
 
 @Entity(
@@ -54,7 +56,9 @@ data class Album(
     @ColumnInfo(name = "artist_id") val artistId: String,
     @ColumnInfo(name = "year") val year: Int? = null,
     @ColumnInfo(name = "cover_uri") val coverArt: String,
-    @ColumnInfo(name = "date_added") val dateAdded: Long = 0
+    @ColumnInfo(name = "date_added") val dateAdded: Long = 0,
+    @ColumnInfo(name = "starred") val starred: Long? = null,
+    @ColumnInfo(name = "user_rating") val userRating: Int? = null
 )
 
 @Entity(
@@ -63,6 +67,8 @@ data class Album(
 data class Artist(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "starred") val starred: Long? = null,
+    @ColumnInfo(name = "user_rating") val userRating: Int? = null
 )
 
 data class AlbumsWithMeta(
@@ -146,4 +152,14 @@ data class PlaylistWithSongs(
         )
     )
     val songs: List<SongWithMetadata>?
+)
+
+@Entity(
+    tableName = "starred"
+)
+data class Starred(
+    @PrimaryKey val id: String,
+    val type: String,
+    val starred: Long? = null,
+    val rating: Int? = null
 )
