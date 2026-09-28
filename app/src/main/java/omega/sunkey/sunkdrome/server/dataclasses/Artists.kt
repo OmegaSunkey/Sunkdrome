@@ -14,7 +14,9 @@ data class ArtistData(
     val id: String,
     val name: String,
     val albumCount: Int,
-    val coverArt: String
+    val coverArt: String,
+    val userRating: Int = 0,
+    val starred: String? = null
 )
 
 data class ArtistsView(
@@ -33,7 +35,7 @@ data class SingleArtist(
     val albumCount: Int,
     val userRating: Int = 0,
     val artistImageUrl: String = "",
-    val starred: String = "",
+    val starred: String? = null,
     val musicBrainzId: String = "",
     val sortName: String = "",
     val roles: List<String> = listOf(""),
