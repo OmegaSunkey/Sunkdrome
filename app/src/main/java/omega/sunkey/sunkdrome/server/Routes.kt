@@ -40,8 +40,10 @@ fun Javalin.setBeforeHandlers() {
         //TODO: actual user management
         if(u == null && p == null) {
             reject(ctx, Reject.MISSINGPARAM)
+            return
         } else if(u != "sunkey" && p != "sunkey") {
             reject(ctx, Reject.WRONGAUTH)
+            return
         } else ctx.attribute("currentUser", u)
     }
 }
