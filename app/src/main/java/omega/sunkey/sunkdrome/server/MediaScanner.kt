@@ -13,6 +13,7 @@ import kotlinx.coroutines.withContext
 import omega.sunkey.sunkdrome.server.room.Artist
 import omega.sunkey.sunkdrome.server.room.Song
 import omega.sunkey.sunkdrome.server.room.Album
+import omega.sunkey.sunkdrome.server.room.Starred
 import omega.sunkey.sunkdrome.server.room.SubsonicDatabase
 import java.security.MessageDigest
 
@@ -35,6 +36,10 @@ class MediaScanner (
                 val artists = mutableMapOf<String, Artist>()
                 val albums = mutableMapOf<String, Album>()
                 val songs = mutableListOf<Song>()
+                val starredItems = mutableMapOf<String, Starred>()
+                dao.getAllStarred().forEach {
+                    starredItems[it.id] = it
+                }
                 for (file in audioFiles) {
                     val meta = extractMeta(file.uri)
                     val name = meta.artist ?: "Unknown Artist"
@@ -43,6 +48,9 @@ class MediaScanner (
                     val artid = name.md5()
                     if(!artists.containsKey(artid)) {
                         artists[artid] = Artist(artid, name)
+                    } else if (starredItems.containsKey(artid)) {
+                        artists[artid] = Artist(artid, name, starredItems[artid]?.starred, starredItems[artid]?.rating)
+                        starredItems.remove(artid)
                     }
                     val bitrate = file.bitrate ?: ((file.size * 8) / (file.duration / 1000) / 1000 ).toInt()
 
@@ -50,7 +58,14 @@ class MediaScanner (
                     val aid = "${artid}_${album}".md5()
                     if (!albums.containsKey(aid)) {
                         albums[aid] = Album(aid, album, artid, year, file.coverId, file.dateAdded)
+                    } else if(starredItems.containsKey(aid)) {
+                        albums[aid] = Album(aid, album, artid, year, file.coverId, file.dateAdded, starredItems[aid]?.starred, starredItems[aid]?.rating)
+                        starredItems.remove(aid)
                     }
+
+                    val starsong = if (starredItems.containsKey(file.id.toString())) {
+                        Pair(starredItems[file.id.toString()]?.starred, starredItems[file.id.toString()]?.rating)
+                    } else Pair(null, null)
 
                     val song = Song(
                         id = file.id.toString(),
@@ -67,13 +82,17 @@ class MediaScanner (
                         genre = meta.genre,
                         suffix = file.displayName.substringAfterLast('.', ""),
                         dateAdded = file.dateAdded,
-                        coverArt = file.coverId
+                        coverArt = file.coverId,
+                        starred = starsong.first,
+                        userRating = starsong.second
                     )
                     songs.add(song)
+                    if (starredItems.containsKey(file.id.toString())) starredItems.remove(file.id.toString())
                 }
                 dao.insertArtists(artists.values.toList())
                 dao.insertAlbums(albums.values.toList())
                 dao.insertSongs(songs)
+                if (starredItems.isNotEmpty()) starredItems.forEach { (id, _) -> dao.removeStar(id) }
                 Log.i("MediaScanner", "done :D | indexed ${artists.size} artists, ${albums.size} albums, and ${songs.size} songs !!!!")
                 Result.success()
             } catch (e: Exception) {
