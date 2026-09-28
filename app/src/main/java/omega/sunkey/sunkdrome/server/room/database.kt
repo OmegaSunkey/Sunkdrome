@@ -11,7 +11,7 @@ import androidx.room.RoomDatabase
 import androidx.room.Transaction
 import androidx.room.Update
 
-@Database(entities = [Artist::class, Album::class, Song::class, Playlist::class, PlaylistSong::class], version = 1)
+@Database(entities = [Artist::class, Album::class, Song::class, Playlist::class, PlaylistSong::class, Starred::class], version = 1)
 abstract class SubsonicDatabase : RoomDatabase() {
     abstract fun subsonicDao(): SubsonicDao
     companion object {
