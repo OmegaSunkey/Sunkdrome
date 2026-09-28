@@ -40,7 +40,7 @@ class MediaScanner (
                     val name = meta.artist ?: "Unknown Artist"
                     val year = file.year ?: meta.year
                     val track = file.track ?: meta.track
-		     val artid = name.md5()
+                    val artid = name.md5()
                     if(!artists.containsKey(artid)) {
                         artists[artid] = Artist(artid, name)
                     }
@@ -62,7 +62,7 @@ class MediaScanner (
                         path = file.path,
                         size = file.size,
                         track = track,
-			 discNumber = file.discNumber,
+                        discNumber = file.discNumber,
                         year = year,
                         genre = meta.genre,
                         suffix = file.displayName.substringAfterLast('.', ""),
@@ -99,8 +99,8 @@ class MediaScanner (
             MediaStore.Audio.Media.DATE_ADDED,
             MediaStore.Audio.Media.ALBUM_ID,
             MediaStore.Audio.Media.YEAR,
-	     MediaStore.Audio.Media.TRACK,
-	     MediaStore.Audio.Media.DISC_NUMBER
+            MediaStore.Audio.Media.TRACK,
+            MediaStore.Audio.Media.DISC_NUMBER
         )
         val sortOrder = "${MediaStore.Audio.Media.DISPLAY_NAME} ASC"
 
@@ -120,8 +120,8 @@ class MediaScanner (
             val date = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATE_ADDED)
             val albumId = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
             val year = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.YEAR)
-	     val track = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TRACK)
-	     val discn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISC_NUMBER)
+            val track = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TRACK)
+            val discn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISC_NUMBER)
 
             while (cursor.moveToNext()) {
                 val idd = cursor.getLong(id)
@@ -134,8 +134,8 @@ class MediaScanner (
                 val cUri = ContentUris.withAppendedId(collection, idd)
                 val coUri = cursor.getLong(albumId).toString()
                 val yearr = cursor.getInt(year)
-		 val trackk = cursor.getInt(track)
-		 val discnumber = cursor.getInt(discn)
+                val trackk = cursor.getInt(track)
+                val discnumber = cursor.getInt(discn)
                 audioFiles.add(AudioFile(idd, namee, dura, bitrate, size, path, dateAdded, cUri, coUri, yearr, trackk, discnumber))
             }
         }
@@ -178,8 +178,8 @@ class MediaScanner (
         val uri: Uri,
         val coverId: String,
         val year: Int?,
-	 val track: Int?,
-	 val discNumber: Int?
+        val track: Int?,
+        val discNumber: Int?
     )
     private data class AudioMetadata(
         val title: String? = null,

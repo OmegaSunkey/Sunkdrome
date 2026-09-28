@@ -37,7 +37,7 @@ fun getAlbum(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 artist = metaalbum.artist.name,
                 track = it.track,
                 discNumber = it.discNumber,
-		 year = it.year,
+                year = it.year,
                 genre = it.genre,
                 coverArt = it.coverArt,
                 size = it.size,
