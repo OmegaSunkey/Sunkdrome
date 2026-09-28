@@ -167,7 +167,7 @@ fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
     }
 }
 
-fun Long.toIsoTime(): String {
+fun Long.toIsoTime(): String? {
     return Instant.ofEpochSecond(this).atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
 }
 
