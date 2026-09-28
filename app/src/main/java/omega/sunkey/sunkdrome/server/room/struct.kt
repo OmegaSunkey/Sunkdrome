@@ -8,6 +8,7 @@ import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import androidx.room.Index
+import androidx.room.Junction
 
 @Entity(
     tableName = "songs",
@@ -103,4 +104,45 @@ data class SongWithMetadata(
         entityColumn = "id"
     )
     val artist: Artist
+)
+
+@Entity(
+    tableName = "playlists"
+)
+data class Playlist(
+    @PrimaryKey val id: String,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "comment") val comment: String = "",
+    @ColumnInfo(name = "owner") val owner: String,
+    @ColumnInfo(name = "public") val public: Boolean = false,
+    @ColumnInfo(name = "song_count") val songCount: Int,
+    @ColumnInfo(name = "duration") val duration: Int,
+    @ColumnInfo(name = "created") val created: Long? = null,
+    @ColumnInfo(name = "changed") val changed: Long? = null
+)
+
+@Entity(
+    tableName = "playlist_songs",
+    primaryKeys = ["playlist_id", "song_id"]
+)
+data class PlaylistSong(
+    @ColumnInfo(name = "playlist_id") val playlistId: String,
+    @ColumnInfo(name = "song_id") val songId: String,
+    @ColumnInfo(name = "order_index") val orderIndex: Int
+)
+
+data class PlaylistWithSongs(
+    @Embedded val playlist: Playlist,
+
+    @Relation(
+        entity = Song::class,
+        parentColumn = "id",
+        entityColumn = "id",
+        associateBy = Junction(
+            value = PlaylistSong::class,
+            parentColumn = "playlist_id",
+            entityColumn = "song_id"
+        )
+    )
+    val songs: List<SongWithMetadata>?
 )

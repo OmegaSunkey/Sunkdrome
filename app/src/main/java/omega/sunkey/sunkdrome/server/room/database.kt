@@ -9,8 +9,9 @@ import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.Transaction
+import androidx.room.Update
 
-@Database(entities = [Artist::class, Album::class, Song::class], version = 1)
+@Database(entities = [Artist::class, Album::class, Song::class, Playlist::class, PlaylistSong::class], version = 1)
 abstract class SubsonicDatabase : RoomDatabase() {
     abstract fun subsonicDao(): SubsonicDao
     companion object {
@@ -105,4 +106,45 @@ interface SubsonicDao {
 
     @Query("DELETE FROM artists")
     suspend fun clearAllArtists()
+
+    // Playlist section
+    @Query("SELECT * FROM playlists")
+    suspend fun getAllPlaylists(): List<Playlist>
+
+    @Transaction
+    @Query("SELECT * FROM playlists WHERE id = :id")
+    suspend fun getPlaylist(id: String): PlaylistWithSongs?
+
+    @Insert(onConflict = REPLACE)
+    suspend fun insertPlaylist(playlist: Playlist)
+
+    @Query("UPDATE playlists SET name = :name WHERE id = :playlistId")
+    suspend fun updatePlaylistName(playlistId: String, name: String)
+
+    @Query("UPDATE playlists SET comment = :comment WHERE id = :playlistId")
+    suspend fun updatePlaylistComment(playlistId: String, comment: String)
+
+    @Query("UPDATE playlists SET public = :public WHERE id = :playlistId")
+    suspend fun updatePlaylistPublic(playlistId: String, public: Boolean)
+
+    @Query("UPDATE playlists SET changed = :date WHERE id = :playlistId")
+    suspend fun updatePlaylistDate(playlistId: String, date: Long)
+
+    @Query("DELETE FROM playlists WHERE id = :playlistId")
+    suspend fun deletePlaylist(playlistId: String)
+
+    @Insert(onConflict = REPLACE)
+    suspend fun insertPlaylistSongs(songs: List<PlaylistSong>)
+
+    @Query("DELETE FROM playlist_songs WHERE playlist_id = :playlistId")
+    suspend fun clearPlaylistSongs(playlistId: String)
+
+    @Query("DELETE FROM playlist_songs WHERE playlist_id = :playlistId AND song_id = :songId")
+    suspend fun deleteSongFromPlaylist(playlistId: String, songId: String)
+
+    @Query("DELETE FROM playlist_songs WHERE playlist_id = :playlistId AND order_index IN (:indices)")
+    suspend fun deleteSongsByIndex(playlistId: String, indices: List<Int>)
+
+    @Query("SELECT MAX(order_index) FROM playlist_songs WHERE playlist_id = :playlistId")
+    suspend fun getMaxOrderIndex(playlistId: String): Int?
 }
