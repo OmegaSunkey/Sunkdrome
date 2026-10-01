@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import omega.sunkey.sunkdrome.server.endpoints.setBeforeHandler
 
 class ServerService : Service() {
     private var server: Javalin? = null
@@ -41,7 +42,7 @@ class ServerService : Service() {
         server = Javalin.create() { config ->
             config.showJavalinBanner = false
         }.apply {
-            setBeforeHandlers()
+            setBeforeHandler()
             setPaths(applicationContext, serverScope)
         }.start("0.0.0.0",4040)
 

@@ -35,24 +35,6 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-fun Javalin.setBeforeHandlers() {
-    this.before("/rest/*") { ctx ->
-        val u = ctx.queryParam("u")
-        val p = ctx.queryParam("p")
-        //val t: String? = ctx.queryParam("t")
-        //val s: String? = ctx.queryParam("s")
-
-        //TODO: actual user management
-        if(u == null && p == null) {
-            reject(ctx, Reject.MISSINGPARAM)
-            return@before
-        } else if(u != "sunkey" && p != "sunkey") {
-            reject(ctx, Reject.WRONGAUTH)
-            return@before
-        } else ctx.attribute("currentUser", u)
-    }
-}
-
 fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
     val db = SubsonicDatabase.getInstance(context)
     val dao = db.subsonicDao()
