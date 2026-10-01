@@ -27,7 +27,9 @@ fun getArtists(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                         metaartist.albums.size,
                         metaartist.albums[0].album.coverArt,
                         metaartist.artist.userRating ?: 0,
-                        metaartist.artist.starred?.toIsoTime()
+                        metaartist.artist.starred?.toIsoTime(),
+                        metaartist.artist.playCount,
+                        metaartist.artist.lastPlayed?.toIsoTime()
                     )
                 )
             } else {
@@ -38,7 +40,9 @@ fun getArtists(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                         metaartist.albums.size,
                         metaartist.albums[0].album.coverArt,
                         metaartist.artist.userRating ?: 0,
-                        metaartist.artist.starred?.toIsoTime()
+                        metaartist.artist.starred?.toIsoTime(),
+                        metaartist.artist.playCount,
+                        metaartist.artist.lastPlayed?.toIsoTime()
                     )
                 )
             }

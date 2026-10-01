@@ -48,7 +48,9 @@ fun getPlaylist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                     albumId = song.albumId,
                     artistId = song.artistId,
                     userRating = song.userRating ?: 0,
-                    starred = song.starred?.toIsoTime()
+                    starred = song.starred?.toIsoTime(),
+                    playCount = song.playCount,
+                    played = song.lastPlayed?.toIsoTime()
                 )
             )
         }

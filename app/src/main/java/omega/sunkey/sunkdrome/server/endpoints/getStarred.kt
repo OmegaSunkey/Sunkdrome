@@ -46,7 +46,9 @@ fun getStarred(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                             albumId = it.song.albumId,
                             artistId = it.song.artistId,
                             userRating = it.song.userRating ?: 0,
-                            starred = it.song.starred?.toIsoTime()
+                            starred = it.song.starred?.toIsoTime(),
+                            playCount = it.song.playCount,
+                            played = it.song.lastPlayed?.toIsoTime()
                         )
                     )
                 }
@@ -65,6 +67,8 @@ fun getStarred(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                             songCount = it.songs.size,
                             created = it.album.dateAdded.toIsoTime(),
                             duration = totalDuration,
+                            playCount = it.album.playCount,
+                            played = it.album.lastPlayed?.toIsoTime(),
                             artistId = it.artist.id,
                             artist = it.artist.name,
                             year = it.album.year ?: 2000,
@@ -82,7 +86,9 @@ fun getStarred(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                             albumCount = it.albums.size,
                             coverArt = it.albums[0].album.coverArt,
                             userRating = it.artist.userRating ?: 0,
-                            starred = it.artist.starred?.toIsoTime()
+                            starred = it.artist.starred?.toIsoTime(),
+                            playCount = it.artist.playCount,
+                            played = it.artist.lastPlayed?.toIsoTime()
                         )
                     )
                 }

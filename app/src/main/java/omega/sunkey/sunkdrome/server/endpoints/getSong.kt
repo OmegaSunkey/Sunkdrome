@@ -41,6 +41,8 @@ fun getSong(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 metasong.song.suffix,
                 metasong.song.userRating ?: 0,
                 metasong.song.starred?.toIsoTime(),
+                metasong.song.playCount,
+                metasong.song.lastPlayed?.toIsoTime(),
                 metasong.song.duration,
                 metasong.song.bitrate,
                 metasong.song.path,

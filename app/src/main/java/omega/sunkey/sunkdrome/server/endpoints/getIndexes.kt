@@ -30,7 +30,11 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                         metaartist.artist.id,
                         metaartist.artist.name,
                         metaartist.albums.size,
-                        metaartist.albums[0].album.coverArt
+                        metaartist.albums[0].album.coverArt,
+                        metaartist.artist.userRating ?: 0,
+                        "",
+                        metaartist.artist.playCount,
+                        metaartist.artist.lastPlayed?.toIsoTime()
                     )
                 )
             } else {
@@ -39,7 +43,11 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                         metaartist.artist.id,
                         metaartist.artist.name,
                         metaartist.albums.size,
-                        metaartist.albums[0].album.coverArt
+                        metaartist.albums[0].album.coverArt,
+                        metaartist.artist.userRating ?: 0,
+                        "",
+                        metaartist.artist.playCount,
+                        metaartist.artist.lastPlayed?.toIsoTime()
                     )
                 )
             }
@@ -60,6 +68,8 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                         songCount = metaalbum.songs.size,
                         created = metaalbum.album.dateAdded.toIsoTime(),
                         duration = totalDuration,
+                        playCount = metaalbum.album.playCount,
+                        played = metaalbum.album.lastPlayed?.toIsoTime(),
                         artistId = metaalbum.artist.id,
                         artist = metaalbum.artist.name,
                         year = metaalbum.album.year ?: 2000,
@@ -77,6 +87,8 @@ fun getIndexes(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                         songCount = metaalbum.songs.size,
                         created = metaalbum.album.dateAdded.toIsoTime(),
                         duration = totalDuration,
+                        playCount = metaalbum.album.playCount,
+                        played = metaalbum.album.lastPlayed?.toIsoTime(),
                         artistId = metaalbum.artist.id,
                         artist = metaalbum.artist.name,
                         year = metaalbum.album.year ?: 2000,

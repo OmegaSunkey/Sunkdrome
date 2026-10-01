@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
 import omega.sunkey.sunkdrome.server.Reject
 import omega.sunkey.sunkdrome.server.dataclasses.AlbumData
-import omega.sunkey.sunkdrome.server.dataclasses.SingleArtist
+import omega.sunkey.sunkdrome.server.dataclasses.ArtistData
 import omega.sunkey.sunkdrome.server.dataclasses.SingleArtistView
 import omega.sunkey.sunkdrome.server.reject
 import omega.sunkey.sunkdrome.server.room.SubsonicDao
@@ -40,6 +40,8 @@ fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 songCount = it.songs.size,
                 created = it.album.dateAdded.toIsoTime(),
                 duration = totalDuration,
+                playCount = it.album.playCount,
+                played = it.album.lastPlayed?.toIsoTime(),
                 artistId = metaartist.artist.id,
                 artist = metaartist.artist.name,
                 year = it.album.year ?: 2000,
@@ -48,15 +50,17 @@ fun getArtist(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
             ))
         }
         success(context, SingleArtistView(
-            SingleArtist(
-                metaartist.artist.name,
-                metaartist.artist.name,
-                metaartist.albums[0].album.coverArt,
-                metaartist.albums.size,
-                0,
-                "http://${context.host()}/rest/getCoverArt.view?id=${metaartist.albums[0].album.coverArt}&u=sunkey&p=sunkey", //remember to remove hardcoded creds
-                metaartist.artist.starred?.toIsoTime(),
+            ArtistData(
+                id = metaartist.artist.id,
+                name = metaartist.artist.name,
+                albumCount = metaartist.albums.size,
+                coverArt = metaartist.albums[0].album.coverArt,
+                userRating = metaartist.artist.userRating ?: 0,
+                playCount = metaartist.artist.playCount,
+                played = metaartist.artist.lastPlayed?.toIsoTime(),
+                starred = metaartist.artist.starred?.toIsoTime(),
                 album = albums
-            )))
+            )
+        ))
     })
 }

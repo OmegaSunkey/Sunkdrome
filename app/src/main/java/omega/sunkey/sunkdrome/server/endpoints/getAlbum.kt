@@ -60,6 +60,8 @@ fun getAlbum(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
                 songCount = metaalbum.songs.size,
                 created = metaalbum.album.dateAdded.toIsoTime(),
                 duration = totalDuration,
+                playCount = metaalbum.album.playCount,
+                played = metaalbum.album.lastPlayed?.toIsoTime(),
                 artistId = metaalbum.album.artistId,
                 artist = metaalbum.artist.name,
                 year = metaalbum.album.year,
