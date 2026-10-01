@@ -18,11 +18,13 @@ import omega.sunkey.sunkdrome.server.endpoints.getCoverArt
 import omega.sunkey.sunkdrome.server.endpoints.getIndexes
 import omega.sunkey.sunkdrome.server.endpoints.getMusicDirectory
 import omega.sunkey.sunkdrome.server.endpoints.getMusicFolders
+import omega.sunkey.sunkdrome.server.endpoints.getNowPlaying
 import omega.sunkey.sunkdrome.server.endpoints.getPlaylist
 import omega.sunkey.sunkdrome.server.endpoints.getPlaylists
 import omega.sunkey.sunkdrome.server.endpoints.getSong
 import omega.sunkey.sunkdrome.server.endpoints.getStarred
 import omega.sunkey.sunkdrome.server.endpoints.getStarred2
+import omega.sunkey.sunkdrome.server.endpoints.scrobble
 import omega.sunkey.sunkdrome.server.endpoints.search3
 import omega.sunkey.sunkdrome.server.endpoints.setRating
 import omega.sunkey.sunkdrome.server.endpoints.star
@@ -138,6 +140,15 @@ fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
     this.get("/rest/getStarred*") { ctx ->
         getStarred(ctx, scope, dao)
     }
+
+    this.get("/rest/scrobble*") { ctx ->
+        scrobble(ctx, scope, dao)
+    }
+
+    this.get("/rest/getNowPlaying*") { ctx ->
+        getNowPlaying(ctx, scope, dao)
+    }
+
 
     this.error(404) { ctx ->
         reject(ctx, Reject.NODATA)
