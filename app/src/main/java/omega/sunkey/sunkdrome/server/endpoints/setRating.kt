@@ -16,7 +16,7 @@ fun setRating(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
     val id = context.queryParam("id")
     val albumId = context.queryParam("albumId")
     val artistId = context.queryParam("artistId")
-    val rating = context.queryParam("rating")?.toIntOrNull()
+    var rating = context.queryParam("rating")?.toIntOrNull()
     when {
         id != null && albumId != null && artistId != null ||
                 id != null && albumId != null ||
@@ -30,7 +30,7 @@ fun setRating(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
             return
         }
         rating != null && rating >= 5 -> {
-            reject(context, Reject.GENERIC)
+            rating = 5
         }
     }
     context.future(scope.future {
