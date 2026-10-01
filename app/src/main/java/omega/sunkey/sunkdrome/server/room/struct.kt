@@ -171,3 +171,13 @@ data class States(
     val playCount: Int = 0,
     val lastPlayed: Long? = null
 )
+
+@Entity(
+    tableName = "scrobbles"
+)
+data class Scrobble(
+    @PrimaryKey val id: String,
+    val username: String,
+    val startedAt: Long,
+    val expiresAt: Long
+)
