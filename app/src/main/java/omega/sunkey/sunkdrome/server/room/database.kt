@@ -9,9 +9,8 @@ import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.Transaction
-import androidx.room.Update
 
-@Database(entities = [Artist::class, Album::class, Song::class, Playlist::class, PlaylistSong::class, Starred::class], version = 1)
+@Database(entities = [Artist::class, Album::class, Song::class, Playlist::class, PlaylistSong::class, States::class, Scrobble::class], version = 1)
 abstract class SubsonicDatabase : RoomDatabase() {
     abstract fun subsonicDao(): SubsonicDao
     companion object {
@@ -151,14 +150,54 @@ interface SubsonicDao {
     //Starring section
 
     @Insert(onConflict = REPLACE)
-    suspend fun addStar(item: Starred)
+    suspend fun addStar(item: States)
 
-    @Query("DELETE FROM starred WHERE id = :id")
+    @Query("UPDATE songs SET starred = :starred WHERE id = :id")
+    suspend fun updateStarredSong(id: String, starred: Long?)
+
+    @Query("UPDATE albums SET starred = :starred WHERE id = :id")
+    suspend fun updateStarredAlbum(id: String, starred: Long?)
+
+    @Query("UPDATE artists SET starred = :starred WHERE id = :id")
+    suspend fun updateStarredArtist(id: String, starred: Long?)
+
+    @Query("UPDATE songs SET user_rating = :rating WHERE id = :id")
+    suspend fun updateSongRating(id: String, rating: Int?)
+
+    @Query("UPDATE albums SET user_rating = :rating WHERE id = :id")
+    suspend fun updateAlbumRating(id: String, rating: Int?)
+
+    @Query("UPDATE artists SET user_rating = :rating WHERE id = :id")
+    suspend fun updateArtistRating(id: String, rating: Int?)
+
+    @Query("DELETE FROM states WHERE id = :id")
     suspend fun removeStar(id: String)
 
-    @Query("SELECT * FROM starred WHERE starred IS NOT NULL")
-    suspend fun getAllStarred(): List<Starred>
+    @Query("SELECT * FROM states WHERE starred IS NOT NULL")
+    suspend fun getAllStarred(): List<States>
 
-    @Query("SELECT * FROM starred WHERE id = :id")
-    suspend fun getStarred(id: String): Starred?
+    @Query("SELECT * FROM states WHERE id = :id")
+    suspend fun getStarred(id: String): States?
+
+    // Scrobbling section
+    @Query("UPDATE states SET playCount = playCount + 1, lastPlayed = :time WHERE id = :id")
+    suspend fun addPlayCount(id: String, time: Long)
+
+    @Insert(onConflict = REPLACE)
+    suspend fun insertScrobble(item: Scrobble)
+
+    @Query("UPDATE songs SET play_count = play_count + 1, last_played = :time WHERE id = :id")
+    suspend fun addSongPlayCount(id: String, time: Long)
+
+    @Query("UPDATE albums SET play_count = play_count + 1, last_played = :time WHERE id = :id")
+    suspend fun addAlbumPlayCount(id: String, time: Long)
+
+    @Query("UPDATE artists SET play_count = play_count + 1, last_played = :time WHERE id = :id")
+    suspend fun addArtistPlayCount(id: String, time: Long)
+
+    @Query("DELETE FROM scrobbles WHERE expiresAt < :time")
+    suspend fun clearScrobbles(time: Long)
+
+    @Query("SELECT * FROM scrobbles WHERE expiresAt > :time")
+    suspend fun getScrobbles(time: Long): List<Scrobble>
 }
