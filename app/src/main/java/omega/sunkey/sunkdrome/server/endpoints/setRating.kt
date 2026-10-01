@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
 import omega.sunkey.sunkdrome.server.Reject
 import omega.sunkey.sunkdrome.server.reject
-import omega.sunkey.sunkdrome.server.room.Starred
+import omega.sunkey.sunkdrome.server.room.States
 import omega.sunkey.sunkdrome.server.room.SubsonicDao
 import omega.sunkey.sunkdrome.server.success
 import kotlin.time.Clock
@@ -36,22 +36,34 @@ fun setRating(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
     context.future(scope.future {
         val star = when {
             id != null && rating != 0 -> {
-                Starred(id, "song", Clock.System.now().epochSeconds, rating)
+                States(id, "song", Clock.System.now().epochSeconds, rating).also {
+                    dao.updateSongRating(it.id, it.rating)
+                }
             }
             artistId != null && rating != 0 -> {
-                Starred(artistId, "artist", Clock.System.now().epochSeconds, rating)
+                States(artistId, "artist", Clock.System.now().epochSeconds, rating).also {
+                    dao.updateArtistRating(it.id, it.rating)
+                }
             }
             albumId != null && rating != 0 -> {
-                Starred(albumId, "artist", Clock.System.now().epochSeconds, rating)
+                States(albumId, "artist", Clock.System.now().epochSeconds, rating).also {
+                    dao.updateAlbumRating(it.id, it.rating)
+                }
             }
             id != null -> {
-                Starred(id, "song", Clock.System.now().epochSeconds)
+                States(id, "song", Clock.System.now().epochSeconds).also {
+                    dao.updateSongRating(it.id, null)
+                }
             }
             artistId != null -> {
-                Starred(artistId, "artist", Clock.System.now().epochSeconds)
+                States(artistId, "artist", Clock.System.now().epochSeconds).also {
+                    dao.updateArtistRating(it.id, null)
+                }
             }
             albumId != null -> {
-                Starred(albumId, "artist", Clock.System.now().epochSeconds)
+                States(albumId, "artist", Clock.System.now().epochSeconds).also {
+                    dao.updateAlbumRating(it.id, null)
+                }
             }
             else -> null
         }

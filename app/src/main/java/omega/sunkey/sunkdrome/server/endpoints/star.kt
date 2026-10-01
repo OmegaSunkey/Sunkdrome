@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.future.future
 import omega.sunkey.sunkdrome.server.Reject
 import omega.sunkey.sunkdrome.server.reject
-import omega.sunkey.sunkdrome.server.room.Starred
+import omega.sunkey.sunkdrome.server.room.States
 import omega.sunkey.sunkdrome.server.room.SubsonicDao
 import omega.sunkey.sunkdrome.server.success
 import kotlin.time.Clock
@@ -32,13 +32,19 @@ fun star(context: Context, scope: CoroutineScope, dao: SubsonicDao) {
     context.future(scope.future {
         val star = when {
             id != null -> {
-                Starred(id, "song", Clock.System.now().epochSeconds)
+                States(id, "song", Clock.System.now().epochSeconds).also {
+                    dao.updateStarredSong(it.id, it.starred)
+                }
             }
             artistId != null -> {
-                Starred(artistId, "artist", Clock.System.now().epochSeconds)
+                States(artistId, "artist", Clock.System.now().epochSeconds).also {
+                    dao.updateStarredArtist(it.id, it.starred)
+                }
             }
             albumId != null -> {
-                Starred(albumId, "artist", Clock.System.now().epochSeconds)
+                States(albumId, "artist", Clock.System.now().epochSeconds).also {
+                    dao.updateStarredAlbum(it.id, it.starred)
+                }
             }
             else -> null
         }
