@@ -1,5 +1,7 @@
 package omega.sunkey.sunkdrome.server.dataclasses
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 data class Artists(
     val ignoredArticles: String,
     val index: List<ArtistIndex>
@@ -16,28 +18,18 @@ data class ArtistData(
     val albumCount: Int,
     val coverArt: String,
     val userRating: Int = 0,
-    val starred: String? = null
+    val artistImageUrl: String? = null,
+    val playCount: Int = 0,
+    val played: String? = null,
+    val starred: String? = null,
+    @param:JsonInclude(JsonInclude.Include.NON_NULL)
+    val album: List<AlbumData>? = null
 )
 
 data class ArtistsView(
     val artists: Artists
 )
 
-// getArtist
 data class SingleArtistView(
-    val artist: SingleArtist
-)
-
-data class SingleArtist(
-    val id: String,
-    val name: String,
-    val coverArt: String,
-    val albumCount: Int,
-    val userRating: Int = 0,
-    val artistImageUrl: String = "",
-    val starred: String? = null,
-    val musicBrainzId: String = "",
-    val sortName: String = "",
-    val roles: List<String> = listOf(""),
-    val album: List<AlbumData>
+    val artist: ArtistData
 )

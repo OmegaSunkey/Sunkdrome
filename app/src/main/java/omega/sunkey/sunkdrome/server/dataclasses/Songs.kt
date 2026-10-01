@@ -20,6 +20,8 @@ data class SongData(
     val suffix: String? = null,
     val userRating: Int = 0,
     val starred: String? = null,
+    val playCount: Int = 0,
+    val played: String? = null,
     val duration: Int? = null,
     val bitRate: Int? = null,
     val path: String? = null,

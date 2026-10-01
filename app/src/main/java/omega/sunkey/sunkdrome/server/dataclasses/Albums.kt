@@ -18,6 +18,7 @@ data class AlbumData(
     val created: String? = "2021-07-22T02:09:31+00:00",
     val duration: Int? = 0,
     val playCount: Int = 0,
+    val played: String? = null,
     val artistId: String,
     val artist: String,
     val year: Int? = 2000,
