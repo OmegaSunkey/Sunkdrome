@@ -15,6 +15,7 @@ import omega.sunkey.sunkdrome.server.endpoints.getAlbumList2
 import omega.sunkey.sunkdrome.server.endpoints.getArtist
 import omega.sunkey.sunkdrome.server.endpoints.getArtists
 import omega.sunkey.sunkdrome.server.endpoints.getCoverArt
+import omega.sunkey.sunkdrome.server.endpoints.getGenres
 import omega.sunkey.sunkdrome.server.endpoints.getIndexes
 import omega.sunkey.sunkdrome.server.endpoints.getMusicDirectory
 import omega.sunkey.sunkdrome.server.endpoints.getMusicFolders
@@ -159,6 +160,9 @@ fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
         getUser(ctx, scope, dao)
     }
 
+    this.get("/rest/getGenres*") { ctx ->
+        getGenres(ctx, scope, dao)
+    }
 
     this.error(404) { ctx ->
         reject(ctx, Reject.NODATA)
