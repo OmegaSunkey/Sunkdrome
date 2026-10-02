@@ -11,7 +11,18 @@ For now the server can do the following:
 - Indexes (i think?)
 - stream music
 
-Bugs: Year is 0. See [this MediaStore issue](https://issuetracker.google.com/issues/414645296?pli=1), wont be fixed until I change metadata parser to something that can read the year.
+Bugs: 
+- Year is 0. See [this MediaStore issue](https://issuetracker.google.com/issues/414645296?pli=1), wont be fixed until I change metadata parser to something that can read the year.
+- Streaming with the stream endpoint sometimes doesn't work / cannot seek into the song
+
+## Is this working? What can I use?
+
+I've tested this implementation on the following clients:
+- Navic
+- Supersonic
+- Strawberry
+
+The hardcoded user is sunkey. The password is sunkey. Multiple users implementation will come later. Maybe. Who knows.
 
 ## Why?
 
