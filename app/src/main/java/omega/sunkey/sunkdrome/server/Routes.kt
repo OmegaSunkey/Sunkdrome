@@ -24,6 +24,8 @@ import omega.sunkey.sunkdrome.server.endpoints.getPlaylists
 import omega.sunkey.sunkdrome.server.endpoints.getSong
 import omega.sunkey.sunkdrome.server.endpoints.getStarred
 import omega.sunkey.sunkdrome.server.endpoints.getStarred2
+import omega.sunkey.sunkdrome.server.endpoints.getUser
+import omega.sunkey.sunkdrome.server.endpoints.getUsers
 import omega.sunkey.sunkdrome.server.endpoints.scrobble
 import omega.sunkey.sunkdrome.server.endpoints.search3
 import omega.sunkey.sunkdrome.server.endpoints.setRating
@@ -147,6 +149,14 @@ fun Javalin.setPaths(context: Context, scope: CoroutineScope) {
 
     this.get("/rest/getNowPlaying*") { ctx ->
         getNowPlaying(ctx, scope, dao)
+    }
+
+    this.get("/rest/getUsers*") { ctx ->
+        getUsers(ctx, scope, dao)
+    }
+
+    this.get("/rest/getUser*") { ctx ->
+        getUser(ctx, scope, dao)
     }
 
 
