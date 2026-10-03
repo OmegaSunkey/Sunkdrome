@@ -1,4 +1,4 @@
-# Sunkdrome
+# Sunkensonic
 
 This is a server implementation of the OpenSubsonic API inside an Android app.
 
