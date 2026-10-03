@@ -1,6 +1,5 @@
 package omega.sunkey.sunkensonic.server
 
-import android.R
 import android.app.Service
 import android.app.Notification
 import android.app.NotificationChannel
@@ -52,7 +51,7 @@ class ServerService : Service() {
         return NotificationCompat.Builder(this, channelId)
             .setContentTitle("Sunkdrome")
             .setContentText("Server running: 4040")
-            .setSmallIcon(R.drawable.ic_media_play)
+            .setSmallIcon(android.R.drawable.ic_media_play)
             .setOngoing(true)
             .build()
     }
