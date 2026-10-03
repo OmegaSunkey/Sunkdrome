@@ -1,5 +1,3 @@
-import com.android.build.api.dsl.Packaging
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -7,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "omega.sunkey.sunkdrome"
+    namespace = "omega.sunkey.sunkensonic"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -15,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "omega.sunkey.sunkdrome"
+        applicationId = "omega.sunkey.sunkensonic"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
